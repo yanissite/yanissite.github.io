@@ -4,554 +4,409 @@ html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAJAH DAVIS | Senior Integration Test Lead & QA Architect</title>
+    <title>TAJAH DAVIS | Senior Integration Test Lead | QA Systems Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #030712;
-            --accent: #38bdf8;
-            --accent-dark: #0ea5e9;
-            --surface: rgba(17, 24, 39, 0.8);
-            --border: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(255, 255, 255, 0.03);
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent: #2563eb; 
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #030712;
+                --surface: #111827;
+                --text-main: #f9fafb;
+                --text-muted: #9ca3af;
+                --border: #1f2937;
+            }
         }
 
         body {
             background-color: var(--bg);
-            color: #f3f4f6;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        /* Glassmorphism Classes */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+        .card {
+            background: var(--surface);
             border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: var(--shadow-sm);
         }
 
-        .glass-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .glass-card:hover {
+        .card:hover {
+            box-shadow: var(--shadow-md);
             border-color: var(--accent);
-            transform: translateY(-5px);
-            background: rgba(56, 189, 248, 0.04);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        /* Hero Scanner Animation */
-        @keyframes scan {
-            0% { top: -100%; }
-            100% { top: 200%; }
-        }
-        .scanner::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: scan 4s linear infinite;
-            opacity: 0.3;
-        }
+        /* Executive Briefing Mode Logic */
+        .briefing-mode .decorative, .briefing-mode .interactive-only { display: none !important; }
+        .briefing-mode .card { box-shadow: none !important; border-radius: 4px; border-color: #000 !important; color: #000 !important; background: #fff !important; }
+        .briefing-mode .text-muted { color: #374151 !important; }
+        .briefing-mode .metric-highlight { color: var(--accent) !important; font-weight: 800; border-bottom: 2px solid var(--accent); }
+        .briefing-mode body { background: #fff !important; color: #000 !important; }
 
-        .section-hidden {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .reveal { animation: fadeInUp 0.5s ease-out forwards; }
 
-        .section-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Matrix Rain Background (Subtle) */
-        #canvas-bg {
+        .contact-pill {
             position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.12;
-            pointer-events: none;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            background: var(--accent);
+            color: white;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+            transition: transform 0.2s;
         }
+        .contact-pill:hover { transform: scale(1.05); }
 
-        /* Recruiter Mode Highlights */
-        .recruiter-highlight {
-            border-color: #10b981 !important;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.1) !important;
-        }
+        /* Sandbox Styles */
+        .status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; }
+        .status-pass { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+        .status-fail { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
+        .status-warn { background-color: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        
+        .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
     </style>
 </head>
-<body class="selection:bg-sky-500 selection:text-white">
+<body class="antialiased">
 
-    <canvas id="canvas-bg"></canvas>
+    <!-- Floating Quick Contact -->
+    <div class="contact-pill decorative shadow-2xl">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        <a href="mailto:Tajahmonay@gmail.com" class="hover:underline">Contact Tajah Davis</a>
+    </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-sky-500 rounded-xl flex items-center justify-center font-black text-black text-2xl shadow-lg shadow-sky-500/20">TD</div>
-                <div>
-                    <h1 class="text-lg font-extrabold tracking-tighter leading-none">TAJAH DAVIS</h1>
-                    <span class="text-[10px] text-sky-400 font-mono tracking-widest uppercase font-bold">Sr. Integration Test Lead</span>
-                </div>
+    <nav class="sticky top-0 w-full z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex flex-col">
+                <h1 class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-none mb-1 uppercase">Tajah Davis</h1>
+                <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 tracking-widest uppercase mono">Senior Integration Test Lead</span>
             </div>
-            <div class="hidden lg:flex items-center gap-10 text-sm font-semibold text-gray-400">
-                <a href="#strategy" class="hover:text-white transition-colors">STRATEGY</a>
-                <a href="#experience" class="hover:text-white transition-colors">TIMELINE</a>
-                <a href="#triage" class="hover:text-white transition-colors">DECISION ENGINE</a>
-                <a href="mailto:Tajahmonay@gmail.com" class="px-6 py-2.5 glass border border-sky-500/30 text-sky-400 rounded-lg hover:bg-sky-500 hover:text-black transition-all">CONNECT</a>
+            
+            <div class="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <a href="#systems" class="hover:text-blue-600 transition-colors">Systems</a>
+                <a href="#sandbox" class="hover:text-blue-600 transition-colors">Validation Sandbox</a>
+                <a href="#experience" class="hover:text-blue-600 transition-colors">Experience</a>
+                <button id="briefing-toggle" class="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-gray-900 dark:text-white">Executive Briefing</button>
             </div>
-            <button id="mobile-menu-btn" class="lg:hidden w-10 h-10 flex items-center justify-center glass rounded-lg text-sky-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </button>
         </div>
     </nav>
 
-    <!-- Floating Recruiter Mode Button -->
-    <div class="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-3">
-        <div id="recruiter-tooltip" class="hidden glass px-4 py-2 rounded-xl text-xs text-white border-emerald-500/50 mb-2 max-w-[200px]">
-            Activating... Highlights 10+ years of high-compliance data.
-        </div>
-        <button id="recruiter-mode-toggle" class="px-6 py-4 bg-sky-500 text-black font-black rounded-2xl flex items-center gap-4 transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-sky-500/20 group">
-            <span class="flex h-3 w-3">
-                <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-white opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-            </span>
-            RECRUITER MODE
-        </button>
-    </div>
-
-    <main class="pt-32 pb-20">
-        
-        <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-6 mb-40">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="relative">
-                    <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold font-mono mb-8 uppercase tracking-widest">
-                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-                        Status: Lead Authority // NC Based
-                    </div>
-                    <h1 class="text-6xl md:text-[5.5rem] font-black tracking-tighter leading-[0.85] mb-10">
-                        ARCHITECTING <span class="text-transparent bg-clip-text bg-gradient-to-br from-sky-300 via-sky-500 to-indigo-500">ZERO-DEFECT</span> RELEASES.
-                    </h1>
-                    <p class="text-xl text-gray-400 mb-12 max-w-xl leading-relaxed">
-                        Senior Integration Test Lead with a proven track record in <span class="text-white font-bold">VHA Healthcare, SAP Enterprise,</span> and federal payment modernization. I don't just find bugs; I safeguard your brand's integrity.
-                    </p>
-                    <div class="flex flex-wrap gap-5">
-                        <a href="mailto:Tajahmonay@gmail.com" class="px-10 py-5 bg-white text-black font-black rounded-xl hover:bg-sky-500 transition-all hover:-translate-y-1">GET RESUME PDF</a>
-                        <a href="#experience" class="px-10 py-5 glass border border-white/10 font-black rounded-xl hover:bg-white/5 transition-all">VIEW TRACK RECORD</a>
-                    </div>
-                </div>
-
-                <!-- Interactive Hero Dashboard -->
-                <div class="relative hidden lg:block">
-                    <div class="aspect-[4/5] glass-card rounded-[2.5rem] overflow-hidden p-10 flex flex-col justify-between scanner">
-                        <div class="flex justify-between items-start">
-                            <div class="space-y-1">
-                                <p class="text-[10px] text-sky-400 mono tracking-widest uppercase font-bold">Career Verification</p>
-                                <p class="text-5xl font-black">10+ Yrs</p>
-                                <p class="text-xs text-gray-500">Enterprise QA Expertise</p>
-                            </div>
-                            <div class="p-5 bg-sky-500/10 rounded-2xl border border-sky-500/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="text-sky-400" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-black/40 p-8 rounded-[2rem] border border-white/5 backdrop-blur-md">
-                            <p class="text-[10px] mono text-sky-400 mb-6 font-black uppercase tracking-widest">Active Specializations</p>
-                            <div class="space-y-6">
-                                <div class="flex justify-between items-center text-xs font-bold">
-                                    <span class="text-gray-300">VHA CCN MODERNIZATION</span>
-                                    <span class="text-sky-400">LEAD AUTH</span>
-                                </div>
-                                <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-sky-500 h-full w-[98%]"></div>
-                                </div>
-                                <div class="flex justify-between items-center text-xs font-bold">
-                                    <span class="text-gray-300">SAP INTERFACE INTEGRITY</span>
-                                    <span class="text-emerald-400">CERTIFIED</span>
-                                </div>
-                                <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-emerald-400 h-full w-full"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-5 p-4 rounded-2xl bg-sky-500/5 border border-sky-500/10">
-                            <div class="w-14 h-14 rounded-full border-2 border-sky-500/40 flex items-center justify-center font-black text-lg text-sky-400">QA</div>
-                            <div class="text-xs">
-                                <p class="font-black text-white text-base">GO/NO-GO AUTHORITY</p>
-                                <p class="text-gray-500 font-mono">Principal Decision Architect</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Hero Section -->
+    <header class="pt-24 pb-20 px-6 max-w-6xl mx-auto">
+        <div class="reveal">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest mb-6">
+                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> NC Based | High-Compliance Specialist
             </div>
-        </section>
-
-        <!-- Metrics Ticker -->
-        <div class="max-w-7xl mx-auto px-6 mb-40">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-10 border-y border-white/5">
-                <div class="text-center">
-                    <p class="text-4xl font-black text-white mb-1">500+</p>
-                    <p class="text-[10px] mono text-sky-400 uppercase font-bold tracking-widest">Test Scripts Authored</p>
-                </div>
-                <div class="text-center border-l border-white/5">
-                    <p class="text-4xl font-black text-white mb-1">0</p>
-                    <p class="text-[10px] mono text-sky-400 uppercase font-bold tracking-widest">Production Escapes</p>
-                </div>
-                <div class="text-center border-l border-white/5">
-                    <p class="text-4xl font-black text-white mb-1">100%</p>
-                    <p class="text-[10px] mono text-sky-400 uppercase font-bold tracking-widest">Agile Compliance</p>
-                </div>
-                <div class="text-center border-l border-white/5">
-                    <p class="text-4xl font-black text-white mb-1">50k+</p>
-                    <p class="text-[10px] mono text-sky-400 uppercase font-bold tracking-widest">Veterans Impacted</p>
-                </div>
+            <h2 class="text-5xl md:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] tracking-tighter mb-8 max-w-4xl">
+                Validating <span class="text-blue-600">Enterprise Integrity</span> in Federal Healthcare & Industrial Systems.
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed mb-10">
+                Senior Integration Test Lead with 10+ years of ownership in high-stakes environments. Specialized in <span class="text-gray-900 dark:text-white font-semibold">VHA Modernization</span>, SAP Enterprise modules, and EDI transaction flows.
+            </p>
+            
+            <div class="flex flex-wrap gap-4 items-center">
+                <a href="mailto:Tajahmonay@gmail.com" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all">Tajahmonay@gmail.com</a>
+                <a href="tel:9733912822" class="px-8 py-4 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-bold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-all">973-391-2822</a>
             </div>
         </div>
+    </header>
 
-        <!-- Strategy Engine -->
-        <section id="strategy" class="max-w-7xl mx-auto px-6 mb-40 section-hidden">
-            <div class="max-w-3xl mb-20">
-                <h2 class="text-5xl font-black mb-6 tracking-tighter">Strategic Methodology</h2>
-                <p class="text-gray-400 text-lg">In enterprise healthcare and industrial tech, QA is the final line of defense. I lead with <span class="text-white">risk-based prioritization</span> and <span class="text-white">cross-functional alignment.</span></p>
+    <!-- Impact Metrics -->
+    <section class="py-12 px-6 max-w-6xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="p-6 card">
+                <p class="text-3xl font-black text-blue-600 mb-1 metric-highlight">10+</p>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Years Domain Exp.</p>
             </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-card p-12 rounded-[2rem]">
-                    <div class="w-14 h-14 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-black mb-4">Master Strategy</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-8">I build high-level Master Test Plans that scale. Governing smoke, regression, and E2E cycles for 500+ scripts across multi-team environments.</p>
-                    <div class="pt-6 border-t border-white/5 space-y-3">
-                        <div class="flex items-center gap-3 text-[10px] font-black mono text-sky-400">
-                            <span class="w-1 h-1 bg-sky-400 rounded-full"></span> UAT GOVERNANCE
-                        </div>
-                        <div class="flex items-center gap-3 text-[10px] font-black mono text-sky-400">
-                            <span class="w-1 h-1 bg-sky-400 rounded-full"></span> REGRESSION OPTIMIZATION
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card p-12 rounded-[2rem] border-sky-500/30">
-                    <div class="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    </div>
-                    <h3 class="text-2xl font-black mb-4">Defect Management</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-8">Specialized in high-stakes triage. Expert at distinguishing between cosmetic UI issues and critical data-integrity blockers that stop releases.</p>
-                    <div class="pt-6 border-t border-white/5 space-y-3">
-                        <div class="flex items-center gap-3 text-[10px] font-black mono text-emerald-400">
-                            <span class="w-1 h-1 bg-emerald-400 rounded-full"></span> P1 RESOLUTION FOCUS
-                        </div>
-                        <div class="flex items-center gap-3 text-[10px] font-black mono text-emerald-400">
-                            <span class="w-1 h-1 bg-emerald-400 rounded-full"></span> JIRA/ALM WORKFLOWS
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card p-12 rounded-[2rem]">
-                    <div class="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                    </div>
-                    <h3 class="text-2xl font-black mb-4">Complex Domains</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-8">Expertise in EDI transactions (834/837), HIPAA compliance, and SAP module exchange. If it involves critical data flow, I've tested it.</p>
-                    <div class="pt-6 border-t border-white/5 space-y-3">
-                        <div class="flex items-center gap-3 text-[10px] font-black mono text-indigo-400">
-                            <span class="w-1 h-1 bg-indigo-400 rounded-full"></span> SAP MODULE MAPPING
-                        </div>
-                        <div class="flex items-center gap-3 text-[10px] font-black mono text-indigo-400">
-                            <span class="w-1 h-1 bg-indigo-400 rounded-full"></span> HIPAA COMPLIANCE
-                        </div>
-                    </div>
-                </div>
+            <div class="p-6 card">
+                <p class="text-3xl font-black text-blue-600 mb-1 metric-highlight">50k+</p>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Stakeholders Impacted</p>
             </div>
-        </section>
-
-        <!-- Decision Simulator (Impression Multiplier) -->
-        <section id="triage" class="max-w-7xl mx-auto px-6 mb-40 section-hidden">
-            <div class="glass-card p-12 rounded-[3rem] border-sky-500/20 bg-black/40 overflow-hidden relative">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <span class="inline-block px-3 py-1 bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-black mono rounded-lg mb-6 tracking-widest">THE TAJAH ENGINE v2.0</span>
-                        <h2 class="text-5xl font-black mb-8 tracking-tighter leading-tight">Test My <br>Release Logic.</h2>
-                        <p class="text-gray-400 mb-10 leading-relaxed text-lg">
-                            Recruiters usually ask "Tell me about a time...". This tool shows you <span class="text-white italic">how I think</span> before you even ask. Select a defect scenario below to see my automated triage report.
-                        </p>
-                        <div class="grid gap-4" id="scenario-selector">
-                            <button onclick="runScenario('p1')" class="group w-full p-6 glass text-left hover:bg-sky-500/10 rounded-2xl border-white/5 transition-all flex justify-between items-center">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                                    <span class="font-bold">SAP Data Mapping Error</span>
-                                </div>
-                                <span class="text-sky-400 font-mono text-xs opacity-0 group-hover:opacity-100 transition-opacity">RUN →</span>
-                            </button>
-                            <button onclick="runScenario('p2')" class="group w-full p-6 glass text-left hover:bg-sky-500/10 rounded-2xl border-white/5 transition-all flex justify-between items-center">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                    <span class="font-bold">VHA Payment UI Mismatch</span>
-                                </div>
-                                <span class="text-sky-400 font-mono text-xs opacity-0 group-hover:opacity-100 transition-opacity">RUN →</span>
-                            </button>
-                            <button onclick="runScenario('p3')" class="group w-full p-6 glass text-left hover:bg-sky-500/10 rounded-2xl border-white/5 transition-all flex justify-between items-center">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                    <span class="font-bold">Middleware Log Warning</span>
-                                </div>
-                                <span class="text-sky-400 font-mono text-xs opacity-0 group-hover:opacity-100 transition-opacity">RUN →</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute -inset-10 bg-sky-500/5 blur-[80px] rounded-full"></div>
-                        <div class="relative bg-gray-950 p-8 rounded-3xl border border-white/10 font-mono text-sm shadow-2xl min-h-[450px]">
-                            <div class="flex gap-2 mb-8">
-                                <div class="w-3 h-3 rounded-full bg-white/10"></div>
-                                <div class="w-3 h-3 rounded-full bg-white/10"></div>
-                                <div class="w-3 h-3 rounded-full bg-white/10"></div>
-                            </div>
-                            <div id="triage-output" class="text-gray-400 leading-relaxed">
-                                <span class="text-sky-400">tajah@qa-lead:~$</span> system_init --load decision_logic.module<br>
-                                <span class="text-emerald-500">READY.</span> Waiting for scenario input...
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="p-6 card">
+                <p class="text-3xl font-black text-blue-600 mb-1 metric-highlight">500+</p>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Test Scripts Authored</p>
             </div>
-        </section>
+            <div class="p-6 card">
+                <p class="text-3xl font-black text-blue-600 mb-1 metric-highlight">0</p>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Critical P1 Escapes</p>
+            </div>
+        </div>
+    </section>
 
-        <!-- Experience Timeline -->
-        <section id="experience" class="max-w-7xl mx-auto px-6 mb-40 section-hidden">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+    <!-- Systems Owned -->
+    <section id="systems" class="py-24 px-6 max-w-6xl mx-auto">
+        <h3 class="text-xs font-black text-blue-600 uppercase tracking-[0.3em] mb-12">Core Competency Matrix</h3>
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="space-y-4">
+                <div class="w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-lg decorative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h4 class="text-lg font-bold text-gray-900 dark:text-white">VHA Modernization</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Leading the validation of CCN payment methodologies and federal healthcare interoperability standards (HL7/EDI).</p>
+            </div>
+            <div class="space-y-4">
+                <div class="w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-lg decorative">
+                    <svg xmlns="http://www.w3.org/2000/round" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h4 class="text-lg font-bold text-gray-900 dark:text-white">ERP & Analytics</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Ensuring data integrity across SAP modules and executive-level analytics reporting for global industrial operations.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-lg decorative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h4 class="text-lg font-bold text-gray-900 dark:text-white">Cross-Functional Triage</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Governing the Go/No-Go decision process between engineering, clinical SMEs, and federal leadership.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive: System Validation Sandbox -->
+    <section id="sandbox" class="py-24 px-6 max-w-6xl mx-auto interactive-only">
+        <div class="bg-gray-900 rounded-2xl p-8 md:p-12 border border-gray-800 shadow-2xl overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-8 opacity-10">
+                <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            
+            <div class="relative z-10 grid lg:grid-cols-[1fr_1.5fr] gap-12 items-center">
                 <div>
-                    <h2 class="text-5xl font-black tracking-tighter">Career Timeline</h2>
-                    <p class="text-gray-500 mt-4 text-lg">Consistent leadership in complex federal & enterprise ecosystems.</p>
-                </div>
-                <div class="px-6 py-3 glass rounded-full text-[10px] mono font-bold text-sky-400 uppercase tracking-widest border-sky-500/30">
-                    Lead Authority Since 2014
-                </div>
-            </div>
-
-            <div class="space-y-12">
-                <!-- Siemens -->
-                <div class="experience-block group relative">
-                    <div class="grid lg:grid-cols-[1fr_3fr] gap-8">
-                        <div>
-                            <p class="text-sky-400 font-black mono text-sm mb-2">2025 — PRESENT</p>
-                            <h3 class="text-3xl font-black">SIEMENS</h3>
-                            <p class="text-gray-500 font-mono uppercase text-[10px] font-black tracking-widest">Enterprise Test Engineer</p>
-                        </div>
-                        <div class="glass-card p-10 lg:p-14 rounded-[2.5rem] group-hover:border-sky-500/50 transition-all">
-                            <p class="text-xl text-gray-200 mb-10 leading-relaxed">
-                                Directing end-to-end integration validation for <span class="text-white font-bold">SAP enterprise systems</span> and Power BI executive reporting. Safeguarding data integrity for mission-critical industrial workloads.
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-12">
-                                <div class="space-y-4">
-                                    <h4 class="text-[10px] mono text-sky-400 font-black tracking-widest uppercase">High Impact</h4>
-                                    <ul class="space-y-4 text-sm text-gray-400">
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">01</span> Validated E2E SAP transaction mapping for global operations.</li>
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">02</span> QA Lead for high-level executive Power BI dashboard logic.</li>
-                                    </ul>
-                                </div>
-                                <div class="space-y-4">
-                                    <h4 class="text-[10px] mono text-sky-400 font-black tracking-widest uppercase">Decision Metrics</h4>
-                                    <ul class="space-y-4 text-sm text-gray-400">
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">03</span> Ultimate Go/No-Go authority for release candidate pushes.</li>
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">04</span> Orchestrated defect triage for 5+ parallel workstreams.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                    <h3 class="text-xs font-black text-blue-400 uppercase tracking-[0.3em] mb-4">Interactive Lab</h3>
+                    <h4 class="text-3xl font-bold text-white mb-6">Validation Logic Sandbox</h4>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Simulate an integration audit. Select a domain below to trigger a validation sequence—demonstrating my approach to catch-all regression and system edge-cases.
+                    </p>
+                    <div class="space-y-3">
+                        <button onclick="runTest('sap')" class="w-full text-left p-4 rounded-lg bg-gray-800 hover:bg-blue-600/20 border border-gray-700 hover:border-blue-500 transition-all text-gray-300 font-semibold flex items-center justify-between">
+                            <span>SAP S/4HANA Data Integrity</span>
+                            <span class="text-[10px] mono opacity-50">CMD: run_integrity_v4</span>
+                        </button>
+                        <button onclick="runTest('ccn')" class="w-full text-left p-4 rounded-lg bg-gray-800 hover:bg-blue-600/20 border border-gray-700 hover:border-blue-500 transition-all text-gray-300 font-semibold flex items-center justify-between">
+                            <span>VHA CCN Payment Flow</span>
+                            <span class="text-[10px] mono opacity-50">CMD: check_edi_837</span>
+                        </button>
+                        <button onclick="runTest('api')" class="w-full text-left p-4 rounded-lg bg-gray-800 hover:bg-blue-600/20 border border-gray-700 hover:border-blue-500 transition-all text-gray-300 font-semibold flex items-center justify-between">
+                            <span>HIE API Interoperability</span>
+                            <span class="text-[10px] mono opacity-50">CMD: test_latency_failover</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- BCBS -->
-                <div class="experience-block group relative">
-                    <div class="grid lg:grid-cols-[1fr_3fr] gap-8">
-                        <div>
-                            <p class="text-sky-400 font-black mono text-sm mb-2">2019 — 2025</p>
-                            <h3 class="text-3xl font-black">FEDERAL BCBS</h3>
-                            <p class="text-gray-500 font-mono uppercase text-[10px] font-black tracking-widest">Integration Test Lead</p>
+                <div class="bg-black/50 border border-gray-800 rounded-xl p-6 mono text-[12px] min-h-[340px] flex flex-col">
+                    <div class="flex items-center gap-2 mb-6 border-b border-gray-800 pb-4">
+                        <div class="status-dot status-pass" id="global-status"></div>
+                        <span class="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Validation Monitor v2.5</span>
+                    </div>
+                    
+                    <div id="test-console" class="flex-grow space-y-2 text-gray-400 overflow-y-auto">
+                        <div class="text-blue-400">> System Ready. Select sequence to begin...</div>
+                    </div>
+
+                    <div class="mt-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold">Sequence Progress</span>
+                            <span id="progress-percent" class="text-[10px] text-blue-400 font-bold">0%</span>
                         </div>
-                        <div class="glass-card p-10 lg:p-14 rounded-[2.5rem] group-hover:border-sky-500/50 transition-all">
-                            <p class="text-xl text-gray-200 mb-10 leading-relaxed">
-                                Owned the integration lifecycle for <span class="text-white font-bold">VHA Healthcare Modernization.</span> Spearheaded the strategy for CCN payment methodologies and EDI transaction flows.
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-12">
-                                <div class="space-y-4">
-                                    <h4 class="text-[10px] mono text-sky-400 font-black tracking-widest uppercase">Core Achievements</h4>
-                                    <ul class="space-y-4 text-sm text-gray-400">
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">01</span> Authored 500+ test scripts with near-zero defect escape rates.</li>
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">02</span> Reduced release cycles by 15% through strategy optimization.</li>
-                                    </ul>
-                                </div>
-                                <div class="space-y-4">
-                                    <h4 class="text-[10px] mono text-sky-400 font-black tracking-widest uppercase">SME Coordination</h4>
-                                    <ul class="space-y-4 text-sm text-gray-400">
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">03</span> Managed requirements for 50,000+ veterans' claim records.</li>
-                                        <li class="flex gap-3"><span class="text-sky-500 font-black">04</span> Principal liaison between clinical SMEs and federal managers.</li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Final Contact CTA -->
-        <section class="max-w-7xl mx-auto px-6 text-center">
-            <div class="py-24 glass rounded-[4rem] border-white/5 relative overflow-hidden">
-                <div class="absolute -top-40 -left-40 w-96 h-96 bg-sky-500/10 blur-[120px] rounded-full"></div>
-                <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full"></div>
-                
-                <h2 class="text-6xl font-black mb-8 tracking-tighter leading-none">Safe Hands for <br>Your Next Release.</h2>
-                <p class="text-gray-400 max-w-xl mx-auto mb-14 text-xl leading-relaxed">
-                    Currently open to Senior Lead opportunities in VHA Modernization, SAP, and Enterprise Health-Tech.
-                </p>
-                <div class="flex flex-col md:flex-row justify-center items-center gap-6">
-                    <a href="mailto:Tajahmonay@gmail.com" class="w-full md:w-auto px-16 py-6 bg-sky-500 text-black font-black rounded-2xl hover:scale-105 transition-all shadow-2xl shadow-sky-500/30">HIRE TAJAH DAVIS</a>
-                    <a href="tel:9733912822" class="w-full md:w-auto px-16 py-6 glass border border-white/10 font-black rounded-2xl hover:bg-white/5 transition-all">973.391.2822</a>
+    <!-- Professional Timeline -->
+    <section id="experience" class="py-24 px-6 max-w-6xl mx-auto border-t border-gray-200 dark:border-gray-800">
+        <h3 class="text-xs font-black text-blue-600 uppercase tracking-[0.3em] mb-16">Career Progression</h3>
+        
+        <div class="space-y-16">
+            <!-- Siemens -->
+            <div class="grid md:grid-cols-[1fr_3fr] gap-8">
+                <div class="text-sm font-bold text-gray-400 mono">2025 — PRESENT</div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <h4 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Siemens</h4>
+                        <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-[10px] font-bold rounded text-gray-600 dark:text-gray-400">FEDERAL SYSTEMS</span>
+                    </div>
+                    <p class="text-lg font-bold text-blue-600 dark:text-blue-400">Senior Enterprise Test Engineer</p>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl">
+                        Leading end-to-end integration validation for <span class="font-semibold text-gray-900 dark:text-white">SAP S/4HANA</span> implementation and Power BI reporting layers. 
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li class="flex gap-3"><span class="text-blue-600 font-bold">•</span> Validated critical data mapping between SAP and Executive BI dashboards.</li>
+                        <li class="flex gap-3"><span class="text-blue-600 font-bold">•</span> Reduced release regression cycles by 15% through optimized script coverage.</li>
+                        <li class="flex gap-3"><span class="text-blue-600 font-bold">•</span> Primary liaison for federal compliance audits regarding system integrity.</li>
+                    </ul>
                 </div>
             </div>
-        </section>
 
-    </main>
+            <!-- BCBS -->
+            <div class="grid md:grid-cols-[1fr_3fr] gap-8">
+                <div class="text-sm font-bold text-gray-400 mono">2019 — 2025</div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <h4 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Federal BCBS</h4>
+                        <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-[10px] font-bold rounded text-gray-600 dark:text-gray-400">HEALTHCARE</span>
+                    </div>
+                    <p class="text-lg font-bold text-blue-600 dark:text-blue-400">Integration Test Lead</p>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl">
+                        Owned the integration strategy for the <span class="font-semibold text-gray-900 dark:text-white">VHA Community Care Network (CCN)</span>. Managed the transition of complex payment methodologies for 50,000+ claimants.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li class="flex gap-3"><span class="text-blue-600 font-bold">•</span> Authored 500+ Master Test Scripts governing EDI 834/837 transaction flows.</li>
+                        <li class="flex gap-3"><span class="text-blue-600 font-bold">•</span> Maintained 0 critical P1 defect escapes across 12+ release cycles.</li>
+                        <li class="flex gap-3"><span class="text-blue-600 font-bold">•</span> Managed high-stakes defect triage meetings with federal government stakeholders.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <footer class="max-w-7xl mx-auto px-6 py-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-gray-500 text-xs font-mono font-bold uppercase tracking-widest">
-        <div>© 2024 TAJAH DAVIS // NC INTEGRATION HUB</div>
-        <div class="flex gap-10">
-            <a href="https://linkedin.com/in/tajah-davis" target="_blank" class="hover:text-sky-400 transition-colors">LINKEDIN</a>
-            <a href="mailto:Tajahmonay@gmail.com" class="hover:text-sky-400 transition-colors">DIRECT EMAIL</a>
-            <span class="text-emerald-500/50">SECURE AUTHORIZATION GRANTED</span>
+    <!-- Final CTA -->
+    <section id="contact" class="py-32 px-6 max-w-6xl mx-auto text-center">
+        <div class="p-12 md:p-24 bg-gray-100 dark:bg-gray-900 rounded-[2rem] border border-gray-200 dark:border-gray-800">
+            <h3 class="text-4xl md:text-6xl font-black mb-8 tracking-tighter">Ready for the next <br><span class="text-blue-600">High-Stakes Release.</span></h3>
+            <p class="text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-xl mx-auto">
+                Currently open to Lead / Architect roles in federal contracting, enterprise health-tech, or industrial integration.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="mailto:Tajahmonay@gmail.com" class="px-10 py-5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all shadow-lg">Contact Tajah Davis</a>
+                <a href="tel:9733912822" class="px-10 py-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all shadow-sm">973-391-2822</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 max-w-6xl mx-auto border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest mono">
+            © 2024 TAJAH DAVIS // LEAD QA ARCHITECT
+        </div>
+        <div class="flex gap-8 text-[10px] font-black text-gray-500 uppercase tracking-widest mono">
+            <a href="mailto:Tajahmonay@gmail.com" class="hover:text-blue-600">Email</a>
+            <a href="tel:9733912822" class="hover:text-blue-600">Phone</a>
+            <a href="https://linkedin.com/in/tajah-davis" target="_blank" class="hover:text-blue-600">LinkedIn</a>
         </div>
     </footer>
 
     <script>
-        // Matrix Rain Background
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        let width, height, columns;
-        const characters = "01010101";
-        const fontSize = 16;
-        let drops = [];
+        // Sandbox Controller
+        const consoleEl = document.getElementById('test-console');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-percent');
+        const globalStatus = document.getElementById('global-status');
 
-        function initCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            columns = Math.floor(width / fontSize);
-            drops = new Array(columns).fill(1);
-        }
+        const testConfigs = {
+            sap: [
+                { msg: "Initiating SAP S/4HANA handoff audit...", status: "pass" },
+                { msg: "Checking OData mapping for BI reporting...", status: "pass" },
+                { msg: "Collision detected in Cost Center ID field.", status: "fail" },
+                { msg: "Applying automated mapping patch...", status: "warn" },
+                { msg: "Validation Complete: Integrity Restored.", status: "pass" }
+            ],
+            ccn: [
+                { msg: "Interfacing with CCN Provider Portal...", status: "pass" },
+                { msg: "Validating EDI 837 Professional Claim...", status: "pass" },
+                { msg: "Compliance Check: HIPAA 5010 Standard...", status: "pass" },
+                { msg: "Simulating VHA Payment Authorization...", status: "pass" },
+                { msg: "Sequence Passed: No P1 Escapes.", status: "pass" }
+            ],
+            api: [
+                { msg: "Pinging HIE Endpoint...", status: "pass" },
+                { msg: "Stress Test: 50k Concurrent Transactions...", status: "warn" },
+                { msg: "Latency detected: 450ms (Limit: 200ms)", status: "fail" },
+                { msg: "Triggering API Gateway Failover...", status: "pass" },
+                { msg: "Failover Success: Latency 85ms.", status: "pass" }
+            ]
+        };
 
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(3, 7, 18, 0.05)';
-            ctx.fillRect(0, 0, width, height);
-            ctx.fillStyle = '#0ea5e9';
-            ctx.font = fontSize + 'px monospace';
+        let isRunning = false;
+        async function runTest(type) {
+            if (isRunning) return;
+            isRunning = true;
+            
+            const steps = testConfigs[type];
+            consoleEl.innerHTML = `<div class="text-blue-400 uppercase font-bold mb-2">>> Initializing ${type.toUpperCase()} Sequence...</div>`;
+            progressFill.style.width = '0%';
+            progressText.innerText = '0%';
+            globalStatus.className = "status-dot status-warn";
 
-            for (let i = 0; i < drops.length; i++) {
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > height && Math.random() > 0.98) drops[i] = 0;
-                drops[i]++;
+            for (let i = 0; i < steps.length; i++) {
+                await new Promise(r => setTimeout(r, 800));
+                
+                const div = document.createElement('div');
+                div.className = steps[i].status === 'fail' ? 'text-red-400' : 
+                                steps[i].status === 'warn' ? 'text-yellow-400' : 'text-gray-300';
+                div.innerHTML = `[${new Date().toLocaleTimeString()}] ${steps[i].msg}`;
+                consoleEl.appendChild(div);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+
+                const progress = Math.round(((i + 1) / steps.length) * 100);
+                progressFill.style.width = `${progress}%`;
+                progressText.innerText = `${progress}%`;
             }
+
+            globalStatus.className = "status-dot status-pass";
+            isRunning = false;
         }
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        setInterval(drawMatrix, 50);
+        // Executive Briefing Mode Toggle
+        const toggleBtn = document.getElementById('briefing-toggle');
+        let briefingActive = false;
 
-        // Scroll reveal logic
-        const revealObserver = new IntersectionObserver((entries) => {
+        toggleBtn.addEventListener('click', () => {
+            briefingActive = !briefingActive;
+            if(briefingActive) {
+                document.body.classList.add('briefing-mode');
+                toggleBtn.innerText = "Exit Briefing View";
+                toggleBtn.classList.replace('border-gray-300', 'border-blue-600');
+                toggleBtn.classList.add('bg-blue-50', 'dark:bg-blue-900/20');
+            } else {
+                document.body.classList.remove('briefing-mode');
+                toggleBtn.innerText = "Executive Briefing";
+                toggleBtn.classList.replace('border-blue-600', 'border-gray-300');
+                toggleBtn.classList.remove('bg-blue-50', 'dark:bg-blue-900/20');
+            }
+        });
+
+        // Intersection Observer for Reveal
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('section-visible');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.section-hidden').forEach(el => revealObserver.observe(el));
-
-        // Triage Simulator Logic
-        function runScenario(type) {
-            const output = document.getElementById('triage-output');
-            output.innerHTML = `<span class="text-sky-400 animate-pulse">Running Diagnostic [${type.toUpperCase()}]...</span>`;
-            
-            setTimeout(() => {
-                let report = "";
-                if (type === 'p1') {
-                    report = `
-                        <span class="text-red-500 font-bold">[CRITICAL] DEFECT DETECTED</span><br>
-                        <span class="text-gray-500 font-bold uppercase text-[10px]">Location: SAP Finance Interface / Module Mapping</span><br><br>
-                        <span class="text-white font-bold">ANALYSIS:</span> Found 0.001% variance in transaction batch posting. Under VHA standards, this constitutes a data-integrity breach.<br><br>
-                        <span class="text-red-400 font-black">TAJAH'S DECISION: NO-GO</span><br>
-                        <span class="text-gray-400 italic">"The risk to the CCN payment pipeline outweighs the deployment timeline. Release halted for P1 remediation."</span>
-                    `;
-                } else if (type === 'p2') {
-                    report = `
-                        <span class="text-yellow-500 font-bold">[MAJOR] DEFECT DETECTED</span><br>
-                        <span class="text-gray-500 font-bold uppercase text-[10px]">Location: Claims Portal Dashboard UI</span><br><br>
-                        <span class="text-white font-bold">ANALYSIS:</span> Loading state for 'Member Benefits' takes 4.2s (Threshold: 3.0s). Functional logic is 100% accurate.<br><br>
-                        <span class="text-sky-400 font-black">TAJAH'S DECISION: CONDITIONAL GO</span><br>
-                        <span class="text-gray-400 italic">"Functional compliance met. Production push approved with a prioritized Performance-Sprint fast-follow for UX."</span>
-                    `;
-                } else if (type === 'p3') {
-                    report = `
-                        <span class="text-emerald-500 font-bold">[LOW] SYSTEM WARNING</span><br>
-                        <span class="text-gray-500 font-bold uppercase text-[10px]">Location: Middleware Log Rotation</span><br><br>
-                        <span class="text-white font-bold">ANALYSIS:</span> Warning flags detected in logs during high-volume E2E testing. No functional or performance impact recorded.<br><br>
-                        <span class="text-emerald-400 font-black">TAJAH'S DECISION: GO</span><br>
-                        <span class="text-gray-400 italic">"Nominal operation. System integrity verified. Proceed to Production."</span>
-                    `;
-                }
-                output.innerHTML = `<span class="text-sky-400">tajah@qa-lead:~$</span> system_triage --type ${type}<br><br>${report}<br><br><span class="text-sky-400">tajah@qa-lead:~$</span> _`;
-            }, 1000);
-        }
-
-        // Recruiter Mode Toggle
-        const recruiterBtn = document.getElementById('recruiter-mode-toggle');
-        const tooltip = document.getElementById('recruiter-tooltip');
-        let recruiterModeActive = false;
-
-        recruiterBtn.addEventListener('click', () => {
-            recruiterModeActive = !recruiterModeActive;
-            const blocks = document.querySelectorAll('.experience-block glass-card');
-            
-            if (recruiterModeActive) {
-                recruiterBtn.innerHTML = "MODE: ACTIVE ✓";
-                recruiterBtn.classList.replace('bg-sky-500', 'bg-emerald-500');
-                document.querySelectorAll('.experience-block .glass-card').forEach(card => {
-                    card.classList.add('recruiter-highlight');
-                });
-                tooltip.classList.remove('hidden');
-                setTimeout(() => tooltip.classList.add('hidden'), 3000);
-            } else {
-                recruiterBtn.innerHTML = `
-                    <span class="flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-white opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-                    </span>
-                    RECRUITER MODE`;
-                recruiterBtn.classList.replace('bg-emerald-500', 'bg-sky-500');
-                document.querySelectorAll('.experience-block .glass-card').forEach(card => {
-                    card.classList.remove('recruiter-highlight');
-                });
-            }
+        document.querySelectorAll('section, header').forEach(section => {
+            observer.observe(section);
         });
     </script>
 </body>
