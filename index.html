@@ -1,529 +1,1826 @@
-html
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAJAH DAVIS | Integration Test Lead & QA Strategist</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #030712;
-            --accent: #38bdf8;
-            --accent-dark: #0ea5e9;
-            --surface: rgba(17, 24, 39, 0.7);
-            --border: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tajah Davis — Senior Software Test Engineer | Integration Test Lead</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
 
-        body {
-            background-color: var(--bg);
-            color: #f3f4f6;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
+:root {
+–bg: #080c10;
+–bg-2: #0d1117;
+–bg-3: #111820;
+–surface: #141c24;
+–surface-2: #1a2332;
+–border: rgba(255,255,255,0.06);
+–border-accent: rgba(0,212,170,0.25);
+–text: #e8edf2;
+–text-muted: #7a8fa6;
+–text-dim: #4a5f72;
+–accent: #00d4aa;
+–accent-2: #0ea5e9;
+–accent-3: #7c3aed;
+–accent-glow: rgba(0,212,170,0.15);
+–accent-glow-2: rgba(14,165,233,0.12);
+–gold: #f0b429;
+–font-display: ‘DM Serif Display’, Georgia, serif;
+–font-body: ‘Outfit’, system-ui, sans-serif;
+–font-mono: ‘DM Mono’, ‘Fira Code’, monospace;
+–radius: 12px;
+–radius-lg: 20px;
+–transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+html { scroll-behavior: smooth; font-size: 16px; }
 
-        /* Glassmorphism */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-        }
+body {
+background: var(–bg);
+color: var(–text);
+font-family: var(–font-body);
+font-weight: 400;
+line-height: 1.6;
+overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+}
 
-        .glass-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(–bg); }
+::-webkit-scrollbar-thumb { background: var(–accent); border-radius: 2px; }
 
-        .glass-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            background: rgba(56, 189, 248, 0.03);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
+/* ─── SELECTION ─── */
+::selection { background: rgba(0,212,170,0.25); color: #fff; }
 
-        /* Animations */
-        @keyframes scan {
-            0% { top: -100%; }
-            100% { top: 200%; }
-        }
+/* ─── NAV ─── */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+padding: 0 clamp(1.5rem, 5vw, 4rem);
+height: 64px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: rgba(8,12,16,0.85);
+backdrop-filter: blur(20px) saturate(160%);
+border-bottom: 1px solid var(–border);
+transition: var(–transition);
+}
 
-        .scanner::after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: scan 3s linear infinite;
-            opacity: 0.5;
-        }
+nav.scrolled {
+background: rgba(8,12,16,0.97);
+border-bottom-color: rgba(0,212,170,0.12);
+}
 
-        .glow-text {
-            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-        }
+.nav-logo {
+font-family: var(–font-mono);
+font-size: 0.85rem;
+font-weight: 500;
+color: var(–accent);
+letter-spacing: 0.08em;
+text-decoration: none;
+}
 
-        .nav-active {
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
-        }
+.nav-links {
+display: flex;
+gap: 2rem;
+list-style: none;
+}
 
-        /* Recruiter Mode Toggle */
-        #recruiter-mode-btn {
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        }
+.nav-links a {
+font-family: var(–font-mono);
+font-size: 0.72rem;
+font-weight: 400;
+color: var(–text-muted);
+text-decoration: none;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+transition: color var(–transition);
+position: relative;
+}
 
-        .section-hidden {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
+.nav-links a::after {
+content: ‘’;
+position: absolute;
+bottom: -4px; left: 0; right: 100%;
+height: 1px;
+background: var(–accent);
+transition: right var(–transition);
+}
 
-        .section-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.nav-links a:hover { color: var(–accent); }
+.nav-links a:hover::after { right: 0; }
 
-        /* Matrix Rain Background (Subtle) */
-        #canvas-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.15;
-        }
-    </style>
+.nav-cta {
+font-family: var(–font-mono);
+font-size: 0.72rem;
+font-weight: 500;
+color: var(–bg);
+background: var(–accent);
+border: none;
+padding: 0.55rem 1.2rem;
+border-radius: 6px;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+cursor: pointer;
+text-decoration: none;
+transition: all var(–transition);
+}
+
+.nav-cta:hover {
+background: #00f5c4;
+transform: translateY(-1px);
+box-shadow: 0 6px 24px rgba(0,212,170,0.35);
+}
+
+/* ─── HERO ─── */
+#hero {
+min-height: 100vh;
+display: flex;
+align-items: center;
+position: relative;
+overflow: hidden;
+padding: 100px clamp(1.5rem, 8vw, 8rem) 6rem;
+}
+
+.hero-bg {
+position: absolute;
+inset: 0;
+pointer-events: none;
+}
+
+.hero-grid {
+position: absolute;
+inset: 0;
+background-image:
+linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
+background-size: 60px 60px;
+mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 80%);
+}
+
+.hero-orb-1 {
+position: absolute;
+top: -20%;
+right: -5%;
+width: 700px;
+height: 700px;
+background: radial-gradient(circle, rgba(0,212,170,0.12) 0%, rgba(14,165,233,0.06) 40%, transparent 70%);
+border-radius: 50%;
+animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.hero-orb-2 {
+position: absolute;
+bottom: -10%;
+left: -10%;
+width: 500px;
+height: 500px;
+background: radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 65%);
+border-radius: 50%;
+animation: pulse-slow 12s ease-in-out infinite reverse;
+}
+
+@keyframes pulse-slow {
+0%, 100% { transform: scale(1) translate(0, 0); opacity: 1; }
+50% { transform: scale(1.08) translate(2%, 2%); opacity: 0.7; }
+}
+
+.hero-scan-line {
+position: absolute;
+top: 0; left: -100%;
+width: 60%;
+height: 2px;
+background: linear-gradient(90deg, transparent, rgba(0,212,170,0.6), transparent);
+animation: scan 6s linear infinite;
+}
+
+@keyframes scan {
+0% { left: -60%; top: 20%; }
+100% { left: 160%; top: 80%; }
+}
+
+.hero-content {
+position: relative;
+z-index: 2;
+max-width: 900px;
+}
+
+.hero-eyebrow {
+display: inline-flex;
+align-items: center;
+gap: 0.6rem;
+font-family: var(–font-mono);
+font-size: 0.72rem;
+font-weight: 500;
+color: var(–accent);
+letter-spacing: 0.16em;
+text-transform: uppercase;
+margin-bottom: 1.5rem;
+opacity: 0;
+animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-eyebrow::before {
+content: ‘’;
+width: 32px;
+height: 1px;
+background: var(–accent);
+}
+
+.hero-name {
+font-family: var(–font-display);
+font-size: clamp(3.5rem, 8vw, 7rem);
+font-weight: 400;
+line-height: 1;
+letter-spacing: -0.02em;
+color: #fff;
+margin-bottom: 0.4rem;
+opacity: 0;
+animation: fadeUp 0.9s 0.35s forwards;
+}
+
+.hero-name span {
+color: var(–accent);
+font-style: italic;
+}
+
+.hero-title {
+font-family: var(–font-mono);
+font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+font-weight: 300;
+color: var(–text-muted);
+letter-spacing: 0.12em;
+text-transform: uppercase;
+margin-bottom: 2rem;
+opacity: 0;
+animation: fadeUp 0.9s 0.5s forwards;
+}
+
+.hero-title strong {
+color: var(–accent-2);
+font-weight: 500;
+}
+
+.hero-statement {
+font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+font-weight: 300;
+color: var(–text-muted);
+max-width: 620px;
+line-height: 1.75;
+margin-bottom: 3rem;
+opacity: 0;
+animation: fadeUp 0.9s 0.65s forwards;
+}
+
+.hero-statement em {
+color: var(–text);
+font-style: normal;
+font-weight: 500;
+}
+
+.hero-actions {
+display: flex;
+gap: 1rem;
+flex-wrap: wrap;
+opacity: 0;
+animation: fadeUp 0.9s 0.8s forwards;
+}
+
+.btn-primary {
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.9rem 2rem;
+background: var(–accent);
+color: var(–bg);
+font-family: var(–font-body);
+font-size: 0.9rem;
+font-weight: 600;
+border: none;
+border-radius: var(–radius);
+cursor: pointer;
+text-decoration: none;
+transition: all var(–transition);
+letter-spacing: 0.01em;
+}
+
+.btn-primary:hover {
+background: #00f5c4;
+transform: translateY(-2px);
+box-shadow: 0 12px 40px rgba(0,212,170,0.4);
+}
+
+.btn-secondary {
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.9rem 2rem;
+background: transparent;
+color: var(–text);
+font-family: var(–font-body);
+font-size: 0.9rem;
+font-weight: 500;
+border: 1px solid var(–border-accent);
+border-radius: var(–radius);
+cursor: pointer;
+text-decoration: none;
+transition: all var(–transition);
+}
+
+.btn-secondary:hover {
+background: var(–accent-glow);
+border-color: var(–accent);
+transform: translateY(-2px);
+}
+
+.hero-scroll-indicator {
+position: absolute;
+bottom: 2.5rem;
+left: 50%;
+transform: translateX(-50%);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.5rem;
+font-family: var(–font-mono);
+font-size: 0.65rem;
+color: var(–text-dim);
+letter-spacing: 0.2em;
+text-transform: uppercase;
+animation: fadeIn 1.5s 1.5s both;
+}
+
+.scroll-line {
+width: 1px;
+height: 40px;
+background: linear-gradient(to bottom, var(–accent), transparent);
+animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+0%, 100% { opacity: 0.4; transform: scaleY(1); }
+50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* ─── VALUE STRIP ─── */
+#value-strip {
+background: var(–surface);
+border-top: 1px solid var(–border);
+border-bottom: 1px solid var(–border);
+padding: 2.5rem clamp(1.5rem, 8vw, 8rem);
+position: relative;
+overflow: hidden;
+}
+
+#value-strip::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(90deg, transparent, var(–accent), var(–accent-2), transparent);
+}
+
+.metrics-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+gap: 2rem;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.metric {
+text-align: center;
+position: relative;
+padding: 1.2rem;
+border-radius: var(–radius);
+transition: all var(–transition);
+}
+
+.metric:hover {
+background: var(–accent-glow);
+}
+
+.metric-number {
+font-family: var(–font-display);
+font-size: clamp(2.2rem, 4vw, 3rem);
+font-weight: 400;
+color: var(–accent);
+line-height: 1;
+margin-bottom: 0.4rem;
+}
+
+.metric-label {
+font-family: var(–font-mono);
+font-size: 0.7rem;
+font-weight: 400;
+color: var(–text-muted);
+letter-spacing: 0.12em;
+text-transform: uppercase;
+}
+
+.metric-divider {
+width: 1px;
+background: var(–border);
+align-self: stretch;
+}
+
+/* ─── SECTIONS ─── */
+section {
+padding: 6rem clamp(1.5rem, 8vw, 8rem);
+}
+
+.section-header {
+margin-bottom: 4rem;
+}
+
+.section-tag {
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+font-family: var(–font-mono);
+font-size: 0.68rem;
+font-weight: 500;
+color: var(–accent);
+letter-spacing: 0.2em;
+text-transform: uppercase;
+margin-bottom: 0.8rem;
+}
+
+.section-tag::before {
+content: ‘’;
+width: 24px;
+height: 1px;
+background: var(–accent);
+}
+
+.section-title {
+font-family: var(–font-display);
+font-size: clamp(2rem, 4vw, 3rem);
+font-weight: 400;
+color: #fff;
+line-height: 1.15;
+}
+
+.section-title em {
+color: var(–accent);
+font-style: italic;
+}
+
+/* ─── ABOUT ─── */
+#about {
+background: var(–bg);
+}
+
+.about-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 5rem;
+align-items: start;
+max-width: 1100px;
+}
+
+.about-text p {
+font-size: 1.05rem;
+color: var(–text-muted);
+line-height: 1.85;
+margin-bottom: 1.4rem;
+}
+
+.about-text p strong {
+color: var(–text);
+font-weight: 600;
+}
+
+.about-text .highlight {
+color: var(–accent);
+}
+
+.about-sidebar {
+display: flex;
+flex-direction: column;
+gap: 1.2rem;
+position: sticky;
+top: 90px;
+}
+
+.sidebar-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 1.4rem 1.6rem;
+position: relative;
+overflow: hidden;
+transition: all var(–transition);
+}
+
+.sidebar-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0;
+width: 3px; height: 100%;
+background: var(–accent);
+}
+
+.sidebar-card:hover {
+border-color: var(–border-accent);
+transform: translateX(4px);
+box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+.sidebar-card-label {
+font-family: var(–font-mono);
+font-size: 0.65rem;
+color: var(–accent);
+letter-spacing: 0.2em;
+text-transform: uppercase;
+margin-bottom: 0.5rem;
+}
+
+.sidebar-card-value {
+font-size: 0.95rem;
+color: var(–text);
+font-weight: 500;
+}
+
+/* ─── EXPERTISE ─── */
+#expertise {
+background: var(–bg-2);
+}
+
+.expertise-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 1.2rem;
+max-width: 1100px;
+}
+
+.expertise-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-lg);
+padding: 2rem;
+position: relative;
+overflow: hidden;
+cursor: default;
+transition: all var(–transition);
+}
+
+.expertise-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(90deg, var(–card-accent, var(–accent)), transparent);
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.4s ease;
+}
+
+.expertise-card:hover {
+border-color: var(–border-accent);
+transform: translateY(-4px);
+box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+background: var(–surface-2);
+}
+
+.expertise-card:hover::before { transform: scaleX(1); }
+
+.card-icon {
+width: 42px;
+height: 42px;
+border-radius: 10px;
+background: var(–accent-glow);
+display: flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 1.2rem;
+font-size: 1.2rem;
+transition: all var(–transition);
+}
+
+.expertise-card:hover .card-icon {
+background: rgba(0,212,170,0.25);
+transform: scale(1.1);
+}
+
+.card-title {
+font-size: 1rem;
+font-weight: 600;
+color: #fff;
+margin-bottom: 1rem;
+letter-spacing: -0.01em;
+}
+
+.card-skills {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+}
+
+.card-skills li {
+display: flex;
+align-items: center;
+gap: 0.6rem;
+font-size: 0.85rem;
+color: var(–text-muted);
+transition: color var(–transition);
+}
+
+.expertise-card:hover .card-skills li { color: var(–text); }
+
+.card-skills li::before {
+content: ‘’;
+width: 5px;
+height: 5px;
+border-radius: 50%;
+background: var(–accent);
+flex-shrink: 0;
+opacity: 0.7;
+}
+
+/* ─── EXPERIENCE ─── */
+#experience {
+background: var(–bg);
+}
+
+.timeline {
+max-width: 900px;
+position: relative;
+}
+
+.timeline::before {
+content: ‘’;
+position: absolute;
+left: 0;
+top: 0; bottom: 0;
+width: 1px;
+background: linear-gradient(to bottom, var(–accent), var(–accent-2), transparent);
+opacity: 0.4;
+}
+
+.timeline-item {
+padding-left: 3rem;
+padding-bottom: 3.5rem;
+position: relative;
+}
+
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-dot {
+position: absolute;
+left: -6px;
+top: 6px;
+width: 13px;
+height: 13px;
+border-radius: 50%;
+background: var(–accent);
+border: 2px solid var(–bg);
+box-shadow: 0 0 0 3px rgba(0,212,170,0.2);
+transition: all var(–transition);
+}
+
+.timeline-item:hover .timeline-dot {
+box-shadow: 0 0 0 6px rgba(0,212,170,0.15), 0 0 20px rgba(0,212,170,0.4);
+transform: scale(1.2);
+}
+
+.timeline-meta {
+display: flex;
+align-items: center;
+gap: 1rem;
+margin-bottom: 0.6rem;
+flex-wrap: wrap;
+}
+
+.timeline-company {
+font-size: 1.2rem;
+font-weight: 700;
+color: #fff;
+letter-spacing: -0.02em;
+}
+
+.timeline-period {
+font-family: var(–font-mono);
+font-size: 0.72rem;
+color: var(–text-dim);
+letter-spacing: 0.1em;
+background: var(–surface);
+padding: 0.25rem 0.7rem;
+border-radius: 100px;
+border: 1px solid var(–border);
+}
+
+.timeline-role {
+font-size: 0.9rem;
+font-weight: 500;
+color: var(–accent);
+margin-bottom: 1rem;
+font-family: var(–font-mono);
+letter-spacing: 0.04em;
+}
+
+.timeline-badges {
+display: flex;
+gap: 0.5rem;
+flex-wrap: wrap;
+margin-bottom: 1.2rem;
+}
+
+.badge {
+font-family: var(–font-mono);
+font-size: 0.62rem;
+font-weight: 500;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+padding: 0.3rem 0.75rem;
+border-radius: 100px;
+border: 1px solid;
+}
+
+.badge-green {
+color: var(–accent);
+border-color: rgba(0,212,170,0.3);
+background: rgba(0,212,170,0.07);
+}
+
+.badge-blue {
+color: var(–accent-2);
+border-color: rgba(14,165,233,0.3);
+background: rgba(14,165,233,0.07);
+}
+
+.badge-purple {
+color: #a78bfa;
+border-color: rgba(167,139,250,0.3);
+background: rgba(167,139,250,0.07);
+}
+
+.badge-gold {
+color: var(–gold);
+border-color: rgba(240,180,41,0.3);
+background: rgba(240,180,41,0.07);
+}
+
+.timeline-body {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-lg);
+overflow: hidden;
+transition: all var(–transition);
+}
+
+.timeline-item:hover .timeline-body {
+border-color: var(–border-accent);
+box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+.timeline-summary {
+padding: 1.6rem;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 1rem;
+user-select: none;
+}
+
+.timeline-summary-text {
+font-size: 0.95rem;
+color: var(–text-muted);
+line-height: 1.6;
+flex: 1;
+}
+
+.expand-icon {
+width: 28px;
+height: 28px;
+border-radius: 50%;
+background: var(–surface-2);
+border: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+transition: all var(–transition);
+font-size: 0.75rem;
+color: var(–text-muted);
+}
+
+.timeline-body.expanded .expand-icon {
+background: var(–accent-glow);
+border-color: var(–accent);
+color: var(–accent);
+transform: rotate(180deg);
+}
+
+.timeline-details {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-body.expanded .timeline-details {
+max-height: 1000px;
+}
+
+.timeline-details-inner {
+padding: 0 1.6rem 1.6rem;
+border-top: 1px solid var(–border);
+padding-top: 1.4rem;
+}
+
+.achievement-list {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 0.8rem;
+}
+
+.achievement-list li {
+display: flex;
+gap: 0.8rem;
+font-size: 0.88rem;
+color: var(–text-muted);
+line-height: 1.65;
+}
+
+.achievement-list li::before {
+content: ‘→’;
+color: var(–accent);
+font-weight: 600;
+flex-shrink: 0;
+margin-top: 0.05em;
+}
+
+.achievement-list li strong {
+color: var(–text);
+font-weight: 600;
+}
+
+/* ─── CASE STUDIES ─── */
+#case-studies {
+background: var(–bg-2);
+}
+
+.cases-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 1.5rem;
+max-width: 1100px;
+}
+
+.case-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-lg);
+padding: 2.2rem;
+position: relative;
+overflow: hidden;
+transition: all var(–transition);
+}
+
+.case-card::after {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: radial-gradient(circle at 70% 80%, var(–card-glow, rgba(0,212,170,0.05)) 0%, transparent 60%);
+pointer-events: none;
+opacity: 0;
+transition: opacity var(–transition);
+}
+
+.case-card:hover {
+border-color: var(–border-accent);
+transform: translateY(-6px);
+box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+}
+
+.case-card:hover::after { opacity: 1; }
+
+.case-number {
+font-family: var(–font-display);
+font-size: 3.5rem;
+font-weight: 400;
+color: rgba(0,212,170,0.1);
+line-height: 1;
+margin-bottom: 0.5rem;
+letter-spacing: -0.04em;
+}
+
+.case-title {
+font-size: 1.15rem;
+font-weight: 700;
+color: #fff;
+margin-bottom: 0.4rem;
+letter-spacing: -0.02em;
+line-height: 1.3;
+}
+
+.case-subtitle {
+font-family: var(–font-mono);
+font-size: 0.68rem;
+color: var(–accent);
+letter-spacing: 0.15em;
+text-transform: uppercase;
+margin-bottom: 1.5rem;
+}
+
+.case-section {
+margin-bottom: 1.1rem;
+}
+
+.case-section-label {
+font-family: var(–font-mono);
+font-size: 0.62rem;
+font-weight: 500;
+color: var(–text-dim);
+letter-spacing: 0.2em;
+text-transform: uppercase;
+margin-bottom: 0.35rem;
+}
+
+.case-section-text {
+font-size: 0.88rem;
+color: var(–text-muted);
+line-height: 1.65;
+}
+
+.case-section-text strong { color: var(–text); font-weight: 600; }
+
+.case-tags {
+display: flex;
+gap: 0.4rem;
+flex-wrap: wrap;
+margin-top: 1.5rem;
+padding-top: 1.2rem;
+border-top: 1px solid var(–border);
+}
+
+.case-tag {
+font-family: var(–font-mono);
+font-size: 0.6rem;
+color: var(–text-dim);
+background: var(–bg);
+padding: 0.25rem 0.65rem;
+border-radius: 100px;
+border: 1px solid var(–border);
+letter-spacing: 0.1em;
+}
+
+/* ─── CERTIFICATIONS ─── */
+#certifications {
+background: var(–bg);
+}
+
+.certs-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+gap: 1rem;
+max-width: 900px;
+}
+
+.cert-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 1.6rem;
+display: flex;
+align-items: flex-start;
+gap: 1rem;
+position: relative;
+overflow: hidden;
+transition: all var(–transition);
+}
+
+.cert-card.featured {
+border-color: rgba(240,180,41,0.3);
+background: linear-gradient(135deg, var(–surface) 0%, rgba(240,180,41,0.05) 100%);
+}
+
+.cert-card.featured::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(90deg, var(–gold), transparent);
+}
+
+.cert-card:hover {
+transform: translateY(-3px);
+box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+border-color: var(–border-accent);
+}
+
+.cert-card.featured:hover {
+border-color: rgba(240,180,41,0.5);
+box-shadow: 0 10px 30px rgba(240,180,41,0.1);
+}
+
+.cert-icon {
+width: 40px;
+height: 40px;
+border-radius: 10px;
+background: var(–accent-glow);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1rem;
+flex-shrink: 0;
+}
+
+.cert-card.featured .cert-icon {
+background: rgba(240,180,41,0.12);
+}
+
+.cert-name {
+font-size: 0.9rem;
+font-weight: 600;
+color: #fff;
+margin-bottom: 0.25rem;
+line-height: 1.3;
+}
+
+.cert-year {
+font-family: var(–font-mono);
+font-size: 0.68rem;
+color: var(–text-dim);
+letter-spacing: 0.1em;
+}
+
+.cert-card.featured .cert-year { color: var(–gold); }
+
+/* ─── CONTACT ─── */
+#contact {
+background: var(–bg-2);
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+#contact::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,212,170,0.05) 0%, transparent 70%);
+pointer-events: none;
+}
+
+.contact-inner {
+position: relative;
+z-index: 1;
+max-width: 700px;
+margin: 0 auto;
+}
+
+.contact-statement {
+font-family: var(–font-display);
+font-size: clamp(1.8rem, 4vw, 2.8rem);
+font-weight: 400;
+color: #fff;
+line-height: 1.25;
+margin-bottom: 1rem;
+}
+
+.contact-statement em { color: var(–accent); font-style: italic; }
+
+.contact-sub {
+font-size: 1rem;
+color: var(–text-muted);
+margin-bottom: 3rem;
+line-height: 1.7;
+}
+
+.contact-links {
+display: flex;
+justify-content: center;
+gap: 1rem;
+flex-wrap: wrap;
+margin-bottom: 2.5rem;
+}
+
+.contact-link {
+display: inline-flex;
+align-items: center;
+gap: 0.6rem;
+padding: 0.9rem 1.8rem;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+color: var(–text);
+font-size: 0.9rem;
+font-weight: 500;
+text-decoration: none;
+transition: all var(–transition);
+}
+
+.contact-link:hover {
+background: var(–accent-glow);
+border-color: var(–accent);
+color: var(–accent);
+transform: translateY(-2px);
+box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.contact-closer {
+font-family: var(–font-mono);
+font-size: 0.78rem;
+color: var(–text-dim);
+letter-spacing: 0.12em;
+padding-top: 2.5rem;
+border-top: 1px solid var(–border);
+}
+
+/* ─── FOOTER ─── */
+footer {
+background: var(–bg);
+padding: 2rem clamp(1.5rem, 8vw, 8rem);
+border-top: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 1rem;
+}
+
+.footer-copy {
+font-family: var(–font-mono);
+font-size: 0.7rem;
+color: var(–text-dim);
+letter-spacing: 0.1em;
+}
+
+.footer-tag {
+font-family: var(–font-mono);
+font-size: 0.7rem;
+color: var(–accent);
+letter-spacing: 0.1em;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+.reveal {
+opacity: 0;
+transform: translateY(30px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+.about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+.about-sidebar { position: static; }
+.nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+section { padding: 4rem 1.5rem; }
+#hero { padding: 100px 1.5rem 5rem; }
+.hero-actions { flex-direction: column; }
+.btn-primary, .btn-secondary { justify-content: center; }
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 9999;
+opacity: 0.025;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 200 200’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.65’ numOctaves=‘3’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’/%3E%3C/svg%3E”);
+background-size: 200px 200px;
+}
+</style>
+
 </head>
-<body class="selection:bg-sky-500 selection:text-white">
+<body>
 
-    <canvas id="canvas-bg"></canvas>
+<!-- ─── NAV ─── -->
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center font-bold text-black text-xl">TD</div>
-                <div class="hidden md:block">
-                    <span class="block text-sm font-bold tracking-tighter">TAJAH DAVIS</span>
-                    <span class="block text-[10px] text-sky-400 font-mono tracking-widest uppercase">Integration Lead</span>
-                </div>
-            </div>
-            <div class="hidden lg:flex items-center gap-10 text-sm font-medium text-gray-400">
-                <a href="#strategy" class="hover:text-white transition-colors">Strategy</a>
-                <a href="#experience" class="hover:text-white transition-colors">Career Timeline</a>
-                <a href="#triage" class="hover:text-white transition-colors">Decision Logic</a>
-                <a href="mailto:Tajahmonay@gmail.com" class="px-5 py-2 glass border border-sky-500/30 text-sky-400 rounded-full hover:bg-sky-500 hover:text-white transition-all">Direct Contact</a>
-            </div>
-            <!-- Recruiter FAB for Mobile/Quick -->
-            <button id="quick-connect" class="lg:hidden w-10 h-10 flex items-center justify-center glass rounded-full text-sky-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            </button>
-        </div>
-    </nav>
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">TD // QA LEAD</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#expertise">Expertise</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#case-studies">Case Studies</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:Tajahmonay@gmail.com" class="nav-cta">Get In Touch</a>
+</nav>
 
-    <!-- Floating Recruiter Mode Button -->
-    <button id="recruiter-mode-toggle" class="fixed bottom-8 right-8 z-[100] px-6 py-3 bg-sky-500 text-black font-bold rounded-full flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group">
-        <span class="relative flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-        </span>
-        RECRUITER MODE
-    </button>
+<!-- ─── HERO ─── -->
 
-    <!-- Main Content -->
-    <main class="pt-32 pb-20">
-        
-        <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-6 mb-32">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="relative">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-mono mb-6">
-                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-                        SYSTEM STATUS: 100% OPERATIONAL
-                    </div>
-                    <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] mb-8">
-                        DRIVING <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 underline decoration-sky-500/30">CONFIDENCE</span> IN EVERY RELEASE.
-                    </h1>
-                    <p class="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed">
-                        Senior Integration Test Lead specializing in high-stakes <span class="text-white font-semibold">VHA Systems, SAP Workflows,</span> and mission-critical payment pipelines. 10+ years of zero-defect production escapes.
-                    </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#experience" class="px-8 py-4 bg-sky-500 text-black font-bold rounded-xl hover:bg-white transition-all hover:-translate-y-1">EXPLORE TIMELINE</a>
-                        <a href="mailto:Tajahmonay@gmail.com" class="px-8 py-4 glass border border-white/10 font-bold rounded-xl hover:bg-white/5 transition-all">GET RESUME PDF</a>
-                    </div>
-                </div>
-                <div class="relative hidden lg:block">
-                    <div class="aspect-square glass-card rounded-3xl overflow-hidden p-8 flex flex-col justify-between scanner">
-                        <div class="flex justify-between items-start">
-                            <div class="space-y-1">
-                                <p class="text-[10px] text-sky-400 mono tracking-widest uppercase">Integration Metric</p>
-                                <p class="text-4xl font-bold">500+</p>
-                                <p class="text-xs text-gray-500">Test Scripts Authored</p>
-                            </div>
-                            <div class="p-4 bg-sky-500/10 rounded-2xl border border-sky-500/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="text-sky-400" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-black/40 p-6 rounded-2xl border border-white/5">
-                            <p class="text-xs mono text-sky-400 mb-4 font-bold">ACTIVE DEPLOYMENT TRACKER</p>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center text-xs">
-                                    <span>VHA CCN Modernization</span>
-                                    <span class="text-sky-400">99.9% VALIDATED</span>
-                                </div>
-                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-sky-500 h-full w-[99.9%]"></div>
-                                </div>
-                                <div class="flex justify-between items-center text-xs">
-                                    <span>SAP Module Interface</span>
-                                    <span class="text-emerald-400">SUCCESS</span>
-                                </div>
-                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-emerald-400 h-full w-full"></div>
-                                </div>
-                            </div>
-                        </div>
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-orb-1"></div>
+    <div class="hero-orb-2"></div>
+    <div class="hero-scan-line"></div>
+  </div>
 
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full border-2 border-sky-500/30 flex items-center justify-center mono text-xs">QA</div>
-                            <div class="text-xs">
-                                <p class="font-bold">GO/NO-GO AUTHORITY</p>
-                                <p class="text-gray-500 uppercase">Principal Decision Maker</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Senior Software Test Engineer</div>
+    <h1 class="hero-name">Tajah <span>Davis</span></h1>
+    <p class="hero-title"><strong>Integration Test Lead</strong> &nbsp;·&nbsp; VHA Systems &nbsp;·&nbsp; Enterprise QA Strategy &nbsp;·&nbsp; Go/No-Go Authority</p>
+    <p class="hero-statement">
+      Driving <em>enterprise QA strategy</em> and integration testing across mission-critical federal healthcare systems — with 10+ years of proven authority over release decisions, zero critical-defect escapes, and multi-system validation at scale.
+    </p>
+    <div class="hero-actions">
+      <a href="#experience" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        View Experience
+      </a>
+      <a href="mailto:Tajahmonay@gmail.com?subject=Resume Request - Tajah Davis" class="btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Request Resume
+      </a>
+    </div>
+  </div>
 
-        <!-- Strategy Grid -->
-        <section id="strategy" class="max-w-7xl mx-auto px-6 mb-32 section-hidden">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-                <div>
-                    <h2 class="text-4xl font-bold mb-4">Core Strategy Engine</h2>
-                    <p class="text-gray-400">Enterprise QA is not about finding bugs; it's about <span class="text-white italic">architecting certainty.</span></p>
-                </div>
-                <div class="flex gap-2">
-                    <span class="px-4 py-2 glass text-xs font-bold text-sky-400">VHA STANDARDS</span>
-                    <span class="px-4 py-2 glass text-xs font-bold text-emerald-400">SAP VALIDATION</span>
-                    <span class="px-4 py-2 glass text-xs font-bold text-indigo-400">AGILE LEAN</span>
-                </div>
-            </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
 
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass-card p-10 rounded-3xl">
-                    <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center text-sky-400 mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Master Test Design</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Development of top-tier Master Test Strategies governing 500+ scripts across regression, smoke, and E2E cycles for federal systems.</p>
-                    <ul class="text-xs space-y-2 text-sky-400/80 font-mono">
-                        <li>+ Regression Suites</li>
-                        <li>+ Integration Pipelines</li>
-                        <li>+ UAT Governance</li>
-                    </ul>
-                </div>
-                <div class="glass-card p-10 rounded-3xl border-sky-500/20">
-                    <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Release Guarding</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Expert defect triage and severity assessment that directly informs Go/No-Go decisions for high-compliance healthcare apps.</p>
-                    <ul class="text-xs space-y-2 text-emerald-400/80 font-mono">
-                        <li>+ Risk-Based Prioritization</li>
-                        <li>+ Release Readiness Audits</li>
-                        <li>+ Stakeholder Alignment</li>
-                    </ul>
-                </div>
-                <div class="glass-card p-10 rounded-3xl">
-                    <div class="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Domain Complexity</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Validation of medical claims, CCN payment methodologies, and SAP module exchange within regulated HIPAA environments.</p>
-                    <ul class="text-xs space-y-2 text-indigo-400/80 font-mono">
-                        <li>+ VHA Modernization</li>
-                        <li>+ EDI Transactions</li>
-                        <li>+ SAP Data Validation</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+<!-- ─── VALUE STRIP ─── -->
 
-        <!-- Experience Timeline -->
-        <section id="experience" class="max-w-7xl mx-auto px-6 mb-32 section-hidden">
-            <h2 class="text-4xl font-bold mb-16 text-center">Career Trajectory</h2>
-            <div class="space-y-12">
-                
-                <!-- Siemens -->
-                <div class="experience-block group">
-                    <div class="grid lg:grid-cols-[1fr_3fr] gap-10">
-                        <div class="space-y-2">
-                            <p class="text-sky-400 mono text-sm font-bold">2025 — 2026</p>
-                            <h3 class="text-3xl font-bold">SIEMENS</h3>
-                            <p class="text-gray-500 uppercase tracking-widest text-xs font-bold">Enterprise Test Engineer</p>
-                        </div>
-                        <div class="glass-card p-8 lg:p-12 rounded-3xl group-hover:border-sky-500/40 transition-all">
-                            <p class="text-lg text-gray-300 mb-8 leading-relaxed">
-                                Lead end-to-end integration validation across <span class="text-white font-bold">SAP enterprise systems</span> and Power BI reporting pipelines. Managing cross-module data integrity for high-compliance industrial environments.
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-8 mb-8 recruiter-content">
-                                <div>
-                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Key Impact</h4>
-                                    <ul class="space-y-3 text-sm text-gray-400">
-                                        <li class="flex gap-2"><span class="text-sky-500">01</span> Validated E2E SAP transaction module mapping.</li>
-                                        <li class="flex gap-2"><span class="text-sky-500">02</span> QA Lead for Power BI executive dashboard data logic.</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Ownership</h4>
-                                    <ul class="space-y-3 text-sm text-gray-400">
-                                        <li class="flex gap-2"><span class="text-sky-500">03</span> Go/No-Go recommendation authority for releases.</li>
-                                        <li class="flex gap-2"><span class="text-sky-500">04</span> Parallel workstream defect triage coordination.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">SAP Modules</span>
-                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">Power BI</span>
-                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">Integration Testing</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div id="value-strip">
+  <div class="metrics-grid">
+    <div class="metric reveal">
+      <div class="metric-number">10+</div>
+      <div class="metric-label">Years Enterprise QA</div>
+    </div>
+    <div class="metric reveal reveal-delay-1">
+      <div class="metric-number">500+</div>
+      <div class="metric-label">Test Scripts Delivered</div>
+    </div>
+    <div class="metric reveal reveal-delay-2">
+      <div class="metric-number">0</div>
+      <div class="metric-label">Critical Defect Escapes</div>
+    </div>
+    <div class="metric reveal reveal-delay-3">
+      <div class="metric-number">50K+</div>
+      <div class="metric-label">Beneficiaries Supported</div>
+    </div>
+    <div class="metric reveal reveal-delay-4">
+      <div class="metric-number">5yr</div>
+      <div class="metric-label">VHA Program Continuity</div>
+    </div>
+  </div>
+</div>
 
-                <!-- BCBS -->
-                <div class="experience-block group">
-                    <div class="grid lg:grid-cols-[1fr_3fr] gap-10">
-                        <div class="space-y-2">
-                            <p class="text-sky-400 mono text-sm font-bold">2019 — 2025</p>
-                            <h3 class="text-3xl font-bold">FEDERAL BCBS</h3>
-                            <p class="text-gray-500 uppercase tracking-widest text-xs font-bold">Integration Test Lead</p>
-                        </div>
-                        <div class="glass-card p-8 lg:p-12 rounded-3xl group-hover:border-sky-500/40 transition-all">
-                            <p class="text-lg text-gray-300 mb-8 leading-relaxed">
-                                Owned full lifecycle integration for <span class="text-white font-bold">VHA healthcare programs.</span> Architected strategies for payment processing systems and EDI transaction workflows supporting 50k+ veterans.
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-8 mb-8 recruiter-content">
-                                <div>
-                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Key Impact</h4>
-                                    <ul class="space-y-3 text-sm text-gray-400">
-                                        <li class="flex gap-2"><span class="text-sky-500">01</span> Authored 500+ test scripts with 100% production stability.</li>
-                                        <li class="flex gap-2"><span class="text-sky-500">02</span> Reduced defect escape rate to historic lows for CCN.</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Leadership</h4>
-                                    <ul class="space-y-3 text-sm text-gray-400">
-                                        <li class="flex gap-2"><span class="text-sky-500">03</span> Coordinated clinical SMEs and federal managers.</li>
-                                        <li class="flex gap-2"><span class="text-sky-500">04</span> Master Test Plan governance for VHA modernization.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">VHA Modernization</span>
-                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">EDI Transactions</span>
-                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">Agile/Scrum</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!-- ─── ABOUT ─── -->
 
-            </div>
-        </section>
+<section id="about">
+  <div class="section-header reveal">
+    <div class="section-tag">Professional Profile</div>
+    <h2 class="section-title">Engineering Quality at<br><em>Federal Scale</em></h2>
+  </div>
 
-        <!-- Interactive Triage Simulator -->
-        <section id="triage" class="max-w-7xl mx-auto px-6 mb-32 section-hidden">
-            <div class="glass-card p-12 rounded-3xl border-sky-500/30 overflow-hidden relative">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-mono mb-6 uppercase tracking-widest">Recruiter Sandbox</div>
-                        <h2 class="text-4xl font-bold mb-6">Test Tajah's <br>Decision Logic.</h2>
-                        <p class="text-gray-400 mb-8 leading-relaxed">
-                            A Senior Lead isn't judged by how many bugs they find, but by the risks they mitigate. Pick a defect scenario to see how Tajah determines release readiness.
-                        </p>
-                        <div class="space-y-4" id="scenario-selector">
-                            <button onclick="runScenario('p1')" class="w-full p-4 glass text-left hover:bg-white/5 transition-all flex justify-between items-center group">
-                                <span>Scenario A: SAP Data Mapping Mismatch</span>
-                                <span class="text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">RUN ANALYTIC →</span>
-                            </button>
-                            <button onclick="runScenario('p2')" class="w-full p-4 glass text-left hover:bg-white/5 transition-all flex justify-between items-center group">
-                                <span>Scenario B: VHA CCN UI Discrepancy</span>
-                                <span class="text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">RUN ANALYTIC →</span>
-                            </button>
-                            <button onclick="runScenario('p3')" class="w-full p-4 glass text-left hover:bg-white/5 transition-all flex justify-between items-center group">
-                                <span>Scenario C: Non-Blocking Log Warning</span>
-                                <span class="text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">RUN ANALYTIC →</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="bg-black/50 p-8 rounded-2xl border border-white/5 min-h-[400px] flex flex-col font-mono text-sm">
-                        <div class="flex gap-2 mb-6">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                        </div>
-                        <div id="triage-output" class="text-gray-300">
-                            <span class="text-sky-400">tajah@qa-lead:~$</span> waiting for scenario input...
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Final CTA -->
-        <section class="max-w-7xl mx-auto px-6 text-center">
-            <div class="py-24 glass rounded-[3rem] border-white/5 relative overflow-hidden">
-                <div class="absolute -top-24 -left-24 w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full"></div>
-                <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full"></div>
-                
-                <h2 class="text-5xl font-bold mb-8">Ready for Production?</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto mb-12 text-lg">
-                    Seeking a Senior Lead role in VHA modernization, SAP validation, or enterprise healthcare IT. Let's ensure your next release is your most stable.
-                </p>
-                <div class="flex flex-col md:flex-row justify-center gap-6">
-                    <a href="mailto:Tajahmonay@gmail.com" class="px-12 py-5 bg-sky-500 text-black font-extrabold rounded-2xl hover:scale-105 transition-all">HIRE TAJAH DAVIS</a>
-                    <a href="tel:9733912822" class="px-12 py-5 glass border border-white/10 font-bold rounded-2xl hover:bg-white/5 transition-all">973.391.2822</a>
-                </div>
-                <div class="mt-16 flex justify-center gap-8 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all">
-                    <span class="mono text-xs tracking-tighter">FEDERAL BLUE CROSS BLUE SHIELD</span>
-                    <span class="mono text-xs tracking-tighter">SIEMENS</span>
-                    <span class="mono text-xs tracking-tighter">IBM</span>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="max-w-7xl mx-auto px-6 py-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-gray-500 text-xs font-mono">
-        <div>© 2024 TAJAH DAVIS // CLAYTON, NC // AUTHORIZED GO/NO-GO</div>
-        <div class="flex gap-6">
-            <a href="https://linkedin.com/in/tajah-davis" class="hover:text-sky-400">LINKEDIN</a>
-            <a href="mailto:Tajahmonay@gmail.com" class="hover:text-sky-400">EMAIL</a>
-            <span class="text-emerald-500">ENCRYPTED // SECURE</span>
-        </div>
-    </footer>
-
-    <script>
-        // Matrix Background
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        let width, height, columns;
-        const characters = "01010101010101010101";
-        const fontSize = 14;
-        let drops = [];
-
-        function initCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            columns = Math.floor(width / fontSize);
-            drops = new Array(columns).fill(1);
-        }
-
-        function draw() {
-            ctx.fillStyle = 'rgba(3, 7, 18, 0.05)';
-            ctx.fillRect(0, 0, width, height);
-            ctx.fillStyle = '#0ea5e9';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        setInterval(draw, 33);
-
-        // Scroll reveal
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('section-visible');
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.section-hidden').forEach(el => observer.observe(el));
-
-        // Triage Simulator Logic
-        function runScenario(type) {
-            const output = document.getElementById('triage-output');
-            output.innerHTML = `<span class="text-sky-400 animate-pulse">Running diagnostic...</span>`;
-            
-            setTimeout(() => {
-                let report = "";
-                if (type === 'p1') {
-                    report = `
-                        <span class="text-red-400">[CRITICAL] DEFECT DETECTED</span><br>
-                        <span class="text-gray-500">Location: SAP Data Mapping Layer</span><br><br>
-                        <span class="text-white">ANALYSIS:</span> Found mismatch in financial transaction posting between SAP module and database.<br><br>
-                        <span class="text-yellow-400">DECISION: NO-GO</span><br>
-                        <span class="text-gray-400">RATIONALE: Data integrity risk outweighs deployment timeline. Rollback recommended. Defect escalated to Lead Developer and Product Owner for P1 resolution.</span>
-                    `;
-                } else if (type === 'p2') {
-                    report = `
-                        <span class="text-yellow-400">[MAJOR] DEFECT DETECTED</span><br>
-                        <span class="text-gray-500">Location: CCN Claims Portal UI</span><br><br>
-                        <span class="text-white">ANALYSIS:</span> Inconsistent font rendering and button alignment on the primary payment portal dashboard for mobile users.<br><br>
-                        <span class="text-sky-400">DECISION: CONDITIONAL GO</span><br>
-                        <span class="text-gray-400">RATIONALE: Defect is purely cosmetic. Core payment engine is functional. Deployment continues with a fast-follow fix scheduled for Sprint +1.</span>
-                    `;
-                } else if (type === 'p3') {
-                    report = `
-                        <span class="text-green-400">[INFO] SYSTEM WARNING</span><br>
-                        <span class="text-gray-500">Location: Middleware Logging Service</span><br><br>
-                        <span class="text-white">ANALYSIS:</span> Warning logs generated during peak load testing but do not affect throughput or response time.<br><br>
-                        <span class="text-emerald-400">DECISION: GO</span><br>
-                        <span class="text-gray-400">RATIONALE: No functional impact detected. System benchmarks meet VHA standards. Proceed with production push.</span>
-                    `;
-                }
-                output.innerHTML = `<span class="text-sky-400">tajah@qa-lead:~$</span> triage --assess ${type}<br><br>${report}`;
-            }, 800);
-        }
-
-        // Recruiter Mode Toggle
-        const recruiterBtn = document.getElementById('recruiter-mode-toggle');
-        let recruiterModeActive = false;
-
-        recruiterBtn.addEventListener('click', () => {
-            recruiterModeActive = !recruiterModeActive;
-            const content = document.querySelectorAll('.recruiter-content');
-            
-            if (recruiterModeActive) {
-                recruiterBtn.innerHTML = "MODE: ACTIVE ✓";
-                recruiterBtn.classList.replace('bg-sky-500', 'bg-emerald-500');
-                document.querySelectorAll('.experience-block').forEach(b => b.classList.add('scale-[1.02]', 'border-emerald-500/40'));
-                // Simulate "Auto-Highlight" for recruiters
-                alert("RECRUITER MODE: Career details expanded. Strategic metrics highlighted. Contact information prioritized.");
-            } else {
-                recruiterBtn.innerHTML = `
-                    <span class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-                    </span>
-                    RECRUITER MODE`;
-                recruiterBtn.classList.replace('bg-emerald-500', 'bg-sky-500');
-                document.querySelectorAll('.experience-block').forEach(b => b.classList.remove('scale-[1.02]', 'border-emerald-500/40'));
-            }
-        });
-    </script>
-</body>
-</html>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        I don't just test software — I <strong>own release confidence</strong> for enterprise systems where failure is not an option. Across a decade of federal healthcare IT, I've built the QA infrastructure that stands between production and failure for systems serving Veterans, clinical staff, and payment operations at national scale.
+      </p>
+      <p>
+        At Federal Blue Cross Blue Shield, I served as the <strong class="highlight">Integration Test Lead</strong> for VA/VHA healthcare programs over five consecutive years — authoring master test strategies, leading defect triage, and delivering Go/No-Go decisions that program leadership relied on each sprint cycle. When the systems are CCN payment processors, EDI pipelines, and VHA clinical portals, there is no margin for guesswork. I built the precision that made those calls defensible.
+      </p>
+      <p>
+        At Siemens, I expanded that authority into <strong>SAP enterprise ecosystems and Power BI reporting validation</strong> — coordinating defect triage across parallel workstreams and producing severity assessments that drove release decisions across a complex, multi-platform industrial environment.
+      </p>
+      <p>
+        I operate where QA intersects with <strong>regulatory compliance, cross-functional leadership, and enterprise system complexity</strong>. That's not a skillset built in a classroom — it's ten years of mission-critical accountability.
+      </p>
+    </div>
 
 ```
+<div class="about-sidebar reveal reveal-delay-2">
+  <div class="sidebar-card">
+    <div class="sidebar-card-label">Domain Authority</div>
+    <div class="sidebar-card-value">VHA Enterprise Systems &amp; CCN Operations</div>
+  </div>
+  <div class="sidebar-card">
+    <div class="sidebar-card-label">Core Strength</div>
+    <div class="sidebar-card-value">Go/No-Go Decision Support &amp; Integration Test Leadership</div>
+  </div>
+  <div class="sidebar-card">
+    <div class="sidebar-card-label">Regulatory Compliance</div>
+    <div class="sidebar-card-value">HIPAA, VHA Standards, EDI Payment Processing</div>
+  </div>
+  <div class="sidebar-card">
+    <div class="sidebar-card-label">Delivery Framework</div>
+    <div class="sidebar-card-value">Agile/Scrum — Certified Scrum Master</div>
+  </div>
+  <div class="sidebar-card">
+    <div class="sidebar-card-label">Location</div>
+    <div class="sidebar-card-value">Clayton, NC &nbsp;·&nbsp; Open to Remote</div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ─── EXPERTISE ─── -->
+
+<section id="expertise">
+  <div class="section-header reveal">
+    <div class="section-tag">Core Competencies</div>
+    <h2 class="section-title">What I Bring<br><em>to the Table</em></h2>
+  </div>
+
+  <div class="expertise-grid">
+
+```
+<div class="expertise-card reveal" style="--card-accent: #00d4aa;">
+  <div class="card-icon">🧪</div>
+  <div class="card-title">Testing Disciplines</div>
+  <ul class="card-skills">
+    <li>End-to-End (E2E) Integration Testing</li>
+    <li>Regression &amp; Smoke Test Cycles</li>
+    <li>User Acceptance Testing (UAT)</li>
+    <li>System &amp; Ad-Hoc Testing</li>
+    <li>Data Validation &amp; Accuracy Testing</li>
+  </ul>
+</div>
+
+<div class="expertise-card reveal reveal-delay-1" style="--card-accent: #0ea5e9;">
+  <div class="card-icon">🏛️</div>
+  <div class="card-title">QA Leadership</div>
+  <ul class="card-skills">
+    <li>Master Test Strategy Development</li>
+    <li>Test Plan Authorship &amp; Ownership</li>
+    <li>Defect Triage &amp; Severity Assessment</li>
+    <li>Go/No-Go Decision Authority</li>
+    <li>Release Readiness Reporting</li>
+    <li>Junior QA Mentorship</li>
+  </ul>
+</div>
+
+<div class="expertise-card reveal reveal-delay-2" style="--card-accent: #7c3aed;">
+  <div class="card-icon">🏥</div>
+  <div class="card-title">Healthcare IT Systems</div>
+  <ul class="card-skills">
+    <li>Veterans Health Administration (VHA)</li>
+    <li>Community Care Network (CCN) Ops</li>
+    <li>EDI Transaction Pipelines</li>
+    <li>Medical Claims Processing</li>
+    <li>HIPAA Compliance Validation</li>
+  </ul>
+</div>
+
+<div class="expertise-card reveal" style="--card-accent: #f0b429;">
+  <div class="card-icon">⚙️</div>
+  <div class="card-title">Enterprise Platforms</div>
+  <ul class="card-skills">
+    <li>SAP Enterprise System Integration</li>
+    <li>Power BI Reporting QA</li>
+    <li>JIRA &amp; Agile Boards</li>
+    <li>GUI &amp; Portal Testing</li>
+    <li>MS Office Suite</li>
+  </ul>
+</div>
+
+<div class="expertise-card reveal reveal-delay-1" style="--card-accent: #10b981;">
+  <div class="card-icon">🔄</div>
+  <div class="card-title">Delivery Methodologies</div>
+  <ul class="card-skills">
+    <li>Agile / Scrum (Certified Scrum Master)</li>
+    <li>Lean QA Processes</li>
+    <li>Cross-Functional Coordination</li>
+    <li>Sprint-Based Test Execution</li>
+    <li>Enterprise Release Management</li>
+  </ul>
+</div>
+
+<div class="expertise-card reveal reveal-delay-2" style="--card-accent: #f43f5e;">
+  <div class="card-icon">📊</div>
+  <div class="card-title">Cross-Functional Alignment</div>
+  <ul class="card-skills">
+    <li>EDI Analyst Collaboration</li>
+    <li>Clinical SME Coordination</li>
+    <li>Federal Program Manager Interface</li>
+    <li>Developer &amp; Data Engineer Liaison</li>
+    <li>Stakeholder Reporting &amp; Communication</li>
+  </ul>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ─── EXPERIENCE ─── -->
+
+<section id="experience">
+  <div class="section-header reveal">
+    <div class="section-tag">Career Timeline</div>
+    <h2 class="section-title">A Decade of<br><em>Delivery</em></h2>
+  </div>
+
+  <div class="timeline">
+
+```
+<!-- SIEMENS -->
+<div class="timeline-item reveal">
+  <div class="timeline-dot"></div>
+  <div class="timeline-meta">
+    <span class="timeline-company">Siemens</span>
+    <span class="timeline-period">May 2025 – Mar 2026</span>
+  </div>
+  <div class="timeline-role">Software Test Engineer / QA Analyst — Enterprise Systems</div>
+  <div class="timeline-badges">
+    <span class="badge badge-green">SAP Integration Testing</span>
+    <span class="badge badge-blue">Power BI Validation</span>
+    <span class="badge badge-purple">Defect Triage Lead</span>
+  </div>
+  <div class="timeline-body" id="siemens-body">
+    <div class="timeline-summary" onclick="toggleExpand('siemens-body')">
+      <span class="timeline-summary-text">
+        Extended enterprise QA depth into SAP system integration and Power BI reporting validation within a regulated industrial environment — owning defect triage and release recommendations across parallel workstreams.
+      </span>
+      <div class="expand-icon" id="siemens-icon">↓</div>
+    </div>
+    <div class="timeline-details">
+      <div class="timeline-details-inner">
+        <ul class="achievement-list">
+          <li>Executed <strong>end-to-end integration testing</strong> across SAP enterprise workflows, verifying transaction processing accuracy, system interfaces, and cross-module data exchange in a regulated industrial environment.</li>
+          <li>Designed and executed targeted test scripts across <strong>SAP module integration points</strong>, identifying defects in system configuration, data mapping, and workflow routing before production deployment.</li>
+          <li>Performed <strong>QA validation of Power BI reporting dashboards</strong>, verifying data source integrity, transformation accuracy, and report output consistency against source system records.</li>
+          <li>Led <strong>defect triage for SAP and reporting platforms</strong>, producing severity assessments and Go/No-Go recommendations that supported release decisions across multiple parallel workstreams.</li>
+          <li>Collaborated with SAP functional analysts, data engineers, and business stakeholders to <strong>align test coverage to enterprise acceptance criteria</strong> and system performance standards.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEDERAL BCBS -->
+<div class="timeline-item reveal reveal-delay-1">
+  <div class="timeline-dot"></div>
+  <div class="timeline-meta">
+    <span class="timeline-company">Federal Blue Cross Blue Shield</span>
+    <span class="timeline-period">Aug 2019 – Apr 2025</span>
+  </div>
+  <div class="timeline-role">Senior Software Test Engineer / Integration Test Lead</div>
+  <div class="timeline-badges">
+    <span class="badge badge-gold">5-Year VHA Engagement</span>
+    <span class="badge badge-green">Go/No-Go Authority</span>
+    <span class="badge badge-blue">500+ Test Scripts</span>
+    <span class="badge badge-purple">Zero Critical Escapes</span>
+  </div>
+  <div class="timeline-body" id="bcbs-body">
+    <div class="timeline-summary" onclick="toggleExpand('bcbs-body')">
+      <span class="timeline-summary-text">
+        Owned the full integration test lifecycle for VA/VHA federal healthcare systems over a 5-year engagement — authoring master test strategies, leading defect triage, and serving as the QA decision authority for every release cycle.
+      </span>
+      <div class="expand-icon" id="bcbs-icon">↓</div>
+    </div>
+    <div class="timeline-details">
+      <div class="timeline-details-inner">
+        <ul class="achievement-list">
+          <li>Owned and delivered <strong>master test strategies and comprehensive test plans</strong> for VA/VHA healthcare systems, including CCN payment processing applications, clinical documentation platforms, and enterprise integration workflows supporting <strong>50,000+ beneficiaries</strong>.</li>
+          <li>Coordinated <strong>end-to-end and integration testing</strong> across multiple interdependent healthcare systems, ensuring seamless data exchange between VHA portals, EDI transaction pipelines, and CCN billing systems.</li>
+          <li>Led defect triage processes and provided <strong>Go/No-Go decision support</strong> to program leadership and client stakeholders — authoring detailed severity assessments and release readiness reports each sprint cycle.</li>
+          <li>Developed and executed <strong>500+ test scripts</strong> spanning regression, integration, smoke, UAT, and ad-hoc cycles — achieving consistent pre-production defect detection and <strong>zero critical-defect escapes</strong> over five years.</li>
+          <li>Served as <strong>Integration Test Manager</strong> for system installation and patch update cycles within Agile/Scrum frameworks, maintaining HIPAA and VHA regulatory compliance throughout all phases.</li>
+          <li>Partnered with developers, clinical SMEs, EDI analysts, and <strong>federal program managers</strong> to align test execution to VHA standards, payment methodology requirements, and enterprise acceptance criteria.</li>
+          <li><strong>Trained and mentored junior QA testers</strong> in documentation standards, defect reporting protocols, and integration testing best practices — elevating team performance and testing consistency.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IBM -->
+<div class="timeline-item reveal reveal-delay-2">
+  <div class="timeline-dot"></div>
+  <div class="timeline-meta">
+    <span class="timeline-company">IBM</span>
+    <span class="timeline-period">Mar 2016 – Oct 2018</span>
+  </div>
+  <div class="timeline-role">QA Test Engineer — Systems &amp; Data Validation</div>
+  <div class="timeline-badges">
+    <span class="badge badge-blue">Data Validation</span>
+    <span class="badge badge-green">Audit Readiness</span>
+    <span class="badge badge-purple">Enterprise Financial Systems</span>
+  </div>
+  <div class="timeline-body" id="ibm-body">
+    <div class="timeline-summary" onclick="toggleExpand('ibm-body')">
+      <span class="timeline-summary-text">
+        Built enterprise QA foundations at IBM, performing detailed data validation on mortgage account management systems and contributing to clean audit outcomes through rigorous documentation and financial data integrity processes.
+      </span>
+      <div class="expand-icon" id="ibm-icon">↓</div>
+    </div>
+    <div class="timeline-details">
+      <div class="timeline-details-inner">
+        <ul class="achievement-list">
+          <li>Performed <strong>detailed data validation and accuracy testing</strong> on mortgage account management systems, verifying repayment plan calculations, payment postings, and account status updates against defined business rules.</li>
+          <li>Supported <strong>audit readiness</strong> through meticulous test documentation and reconciliation of system records, contributing to clean audit outcomes via structured data verification.</li>
+          <li>Applied analytical problem-solving to identify and escalate <strong>data discrepancies across enterprise financial systems</strong>, ensuring end-to-end data integrity from intake through final account resolution.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ─── CASE STUDIES ─── -->
+
+<section id="case-studies">
+  <div class="section-header reveal">
+    <div class="section-tag">Signature Work</div>
+    <h2 class="section-title">Case Studies in<br><em>Enterprise Impact</em></h2>
+  </div>
+
+  <div class="cases-grid">
+
+```
+<div class="case-card reveal" style="--card-glow: rgba(0,212,170,0.08);">
+  <div class="case-number">01</div>
+  <div class="case-title">VHA Integration Testing at Scale</div>
+  <div class="case-subtitle">Federal Blue Cross Blue Shield · 2019–2025</div>
+
+  <div class="case-section">
+    <div class="case-section-label">The Challenge</div>
+    <div class="case-section-text">Federal healthcare systems serving <strong>50,000+ Veterans</strong> across CCN payment workflows, clinical documentation, and EDI pipelines — with zero tolerance for production defects and strict HIPAA/VHA compliance requirements.</div>
+  </div>
+  <div class="case-section">
+    <div class="case-section-label">My Approach</div>
+    <div class="case-section-text">Built master test strategies from the ground up. Coordinated E2E integration testing across interdependent VHA portals, EDI transaction pipelines, and CCN billing systems. Led sprint-level defect triage with direct program leadership interface.</div>
+  </div>
+  <div class="case-section">
+    <div class="case-section-label">Outcome</div>
+    <div class="case-section-text"><strong>500+ test scripts</strong> delivered. <strong>Zero critical defect escapes</strong> across a 5-year federal engagement. Go/No-Go recommendations delivered and trusted every release cycle.</div>
+  </div>
+  <div class="case-tags">
+    <span class="case-tag">VHA Systems</span>
+    <span class="case-tag">EDI Pipelines</span>
+    <span class="case-tag">CCN Billing</span>
+    <span class="case-tag">HIPAA</span>
+    <span class="case-tag">Clinical Docs</span>
+  </div>
+</div>
+
+<div class="case-card reveal reveal-delay-1" style="--card-glow: rgba(14,165,233,0.08);">
+  <div class="case-number">02</div>
+  <div class="case-title">SAP Enterprise Validation & Power BI QA</div>
+  <div class="case-subtitle">Siemens · 2025–2026</div>
+
+  <div class="case-section">
+    <div class="case-section-label">The Challenge</div>
+    <div class="case-section-text">Complex, multi-platform SAP enterprise environment with parallel system workstreams, cross-module data exchange requirements, and Power BI reporting pipelines critical to operations leadership decision-making.</div>
+  </div>
+  <div class="case-section">
+    <div class="case-section-label">My Approach</div>
+    <div class="case-section-text">Designed targeted integration test scripts across SAP module touchpoints. Validated Power BI data source integrity and transformation accuracy against source systems. Led defect triage across parallel workstreams with severity-based Go/No-Go output.</div>
+  </div>
+  <div class="case-section">
+    <div class="case-section-label">Outcome</div>
+    <div class="case-section-text">Production deployments cleared with comprehensive pre-release defect detection. Reporting pipeline validated for <strong>operational leadership accuracy</strong>. Cross-functional alignment maintained across SAP functional analysts, data engineers, and business stakeholders.</div>
+  </div>
+  <div class="case-tags">
+    <span class="case-tag">SAP</span>
+    <span class="case-tag">Power BI</span>
+    <span class="case-tag">Defect Triage</span>
+    <span class="case-tag">Data Validation</span>
+    <span class="case-tag">Industrial</span>
+  </div>
+</div>
+
+<div class="case-card reveal reveal-delay-2" style="--card-glow: rgba(124,58,237,0.08);">
+  <div class="case-number">03</div>
+  <div class="case-title">Release Decision Architecture Across Federal Programs</div>
+  <div class="case-subtitle">Cross-Engagement Pattern · 2019–2026</div>
+
+  <div class="case-section">
+    <div class="case-section-label">The Challenge</div>
+    <div class="case-section-text">Federal and enterprise programs require QA leads who don't just execute tests — they must own the narrative that justifies production releases to program leadership, clients, and regulatory stakeholders.</div>
+  </div>
+  <div class="case-section">
+    <div class="case-section-label">My Approach</div>
+    <div class="case-section-text">Built repeatable release readiness frameworks: sprint-level defect severity assessments, structured Go/No-Go documentation, and cross-functional triage coordination that translates test data into executive-level release confidence.</div>
+  </div>
+  <div class="case-section">
+    <div class="case-section-label">Outcome</div>
+    <div class="case-section-text">Trusted as the <strong>QA decision authority</strong> across federal and enterprise programs. Release readiness outputs adopted as program documentation standards. Junior testers trained to sustain this framework under my leadership.</div>
+  </div>
+  <div class="case-tags">
+    <span class="case-tag">Go/No-Go</span>
+    <span class="case-tag">Release Strategy</span>
+    <span class="case-tag">QA Leadership</span>
+    <span class="case-tag">Mentorship</span>
+    <span class="case-tag">Documentation</span>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ─── CERTIFICATIONS ─── -->
+
+<section id="certifications">
+  <div class="section-header reveal">
+    <div class="section-tag">Credentials</div>
+    <h2 class="section-title">Certified.<br><em>Committed.</em></h2>
+  </div>
+
+  <div class="certs-grid">
+    <div class="cert-card featured reveal">
+      <div class="cert-icon">🏆</div>
+      <div>
+        <div class="cert-name">Professional Scrum Master I (PSM I)</div>
+        <div class="cert-year">Certified 2023</div>
+      </div>
+    </div>
+    <div class="cert-card reveal reveal-delay-1">
+      <div class="cert-icon">⚡</div>
+      <div>
+        <div class="cert-name">Agile Lean Methodology Certification</div>
+        <div class="cert-year">Certified 2022</div>
+      </div>
+    </div>
+    <div class="cert-card reveal reveal-delay-2">
+      <div class="cert-icon">🔬</div>
+      <div>
+        <div class="cert-name">Sterile Processing Technician</div>
+        <div class="cert-year">Pending 2026</div>
+      </div>
+    </div>
+    <div class="cert-card reveal reveal-delay-3">
+      <div class="cert-icon">🧬</div>
+      <div>
+        <div class="cert-name">BioWork Processing Technician</div>
+        <div class="cert-year">Pending 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-tag reveal" style="justify-content: center;">Let's Connect</div>
+    <h2 class="contact-statement reveal">
+      Ready to lead <em>integration testing</em><br>at your organization.
+    </h2>
+    <p class="contact-sub reveal">
+      Available to lead QA strategy, integration testing, and enterprise validation initiatives. If your program needs someone who has already done this work at federal scale — let's talk.
+    </p>
+
+```
+<div class="contact-links reveal">
+  <a href="mailto:Tajahmonay@gmail.com" class="contact-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    Tajahmonay@gmail.com
+  </a>
+  <a href="tel:9733912822" class="contact-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    (973) 391-2822
+  </a>
+  <a href="https://linkedin.com/in/tajah-davis" target="_blank" rel="noopener" class="contact-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    LinkedIn Profile
+  </a>
+</div>
+
+<div class="contact-closer reveal">
+  Clayton, NC &nbsp;·&nbsp; Open to Remote &nbsp;·&nbsp; Available Immediately
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+
+<footer>
+  <span class="footer-copy">© 2025 Tajah Davis · Senior Software Test Engineer</span>
+  <span class="footer-tag">VHA · SAP · CCN · Integration Testing</span>
+</footer>
+
+<script>
+  // ─── NAV SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ─── SCROLL REVEAL
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // ─── ACCORDION EXPAND
+  function toggleExpand(id) {
+    const body = document.getElementById(id);
+    const icon = body.querySelector('.expand-icon');
+    const isExpanded = body.classList.toggle('expanded');
+    icon.textContent = isExpanded ? '↑' : '↓';
+  }
+
+  // ─── METRIC COUNTER ANIMATION
+  function animateCounter(el, target, duration = 1800) {
+    const isPlus = el.textContent.includes('+');
+    const isK = el.textContent.includes('K');
+    const isYr = el.textContent.includes('yr');
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        start = target;
+        clearInterval(timer);
+      }
+      let display = Math.floor(start);
+      if (isK) display = (display / 1000).toFixed(0) + 'K';
+      if (isYr) display = display + 'yr';
+      el.textContent = display + (isPlus ? '+' : '');
+    }, 16);
+  }
+
+  const metricObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target.querySelector('.metric-number');
+        const raw = el.textContent.trim();
+        if (raw === '0') { el.textContent = '0'; return; }
+        const num = parseInt(raw.replace(/[^0-9]/g, ''));
+        if (!isNaN(num) && num > 0) animateCounter(el, num);
+        metricObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.metric').forEach(m => metricObserver.observe(m));
+
+  // ─── SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ─── SUBTLE CURSOR GLOW
+  let mouseX = 0, mouseY = 0;
+  const glow = document.createElement('div');
+  glow.style.cssText = `
+    position: fixed; pointer-events: none; z-index: 9998;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,170,0.04) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: left 0.15s ease, top 0.15s ease;
+  `;
+  document.body.appendChild(glow);
+
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+</script>
+
+</body>
+</html>
