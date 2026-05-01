@@ -2,1338 +2,527 @@ html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>One Page Book Club</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAJAH DAVIS | Integration Test Lead & QA Strategist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --accent: #38bdf8;
+            --accent-dark: #0ea5e9;
+            --surface: rgba(17, 24, 39, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+        }
 
-<style>
-  /* ─── TOKENS ──────────────────────────────────────────────── */
-  :root {
-    --cream:     #f7f3ec;
-    --parchment: #ede6d6;
-    --warm-tan:  #d9ccb4;
-    --ink:       #2c2416;
-    --ink-light: #5a4e38;
-    --ink-faint: #9a8e78;
-    --sage:      #7a9e7e;
-    --sage-dark: #5c7d60;
-    --blush:     #c98a7d;
-    --gold:      #c9a84c;
-    --shadow:    rgba(44,36,22,0.10);
-    --shadow-md: rgba(44,36,22,0.18);
-    --r:         16px;
-    --r-lg:      28px;
-  }
+        body {
+            background-color: var(--bg);
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
 
-  /* ─── RESET ───────────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Lora', Georgia, serif;
-    background: var(--cream);
-    color: var(--ink);
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
-  img, svg { display: block; }
-  button { cursor: pointer; border: none; background: none; font-family: inherit; }
-  input, textarea { font-family: inherit; }
-  a { color: inherit; text-decoration: none; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
 
-  /* ─── NOISE TEXTURE ───────────────────────────────────────── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.6;
-  }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-  /* ─── PROGRESS BAR ────────────────────────────────────────── */
-  #progress-wrap {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    z-index: 1000;
-    background: var(--parchment);
-  }
-  #progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--sage), var(--gold));
-    transition: width 0.1s linear;
-  }
-  #progress-label {
-    position: fixed;
-    top: 10px;
-    right: 18px;
-    font-family: 'Caveat', cursive;
-    font-size: 13px;
-    color: var(--ink-faint);
-    z-index: 1001;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
+        /* Glassmorphism */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
 
-  /* ─── PAGE NUMBER ─────────────────────────────────────────── */
-  #page-num {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    font-family: 'Caveat', cursive;
-    font-size: 15px;
-    color: var(--ink-faint);
-    z-index: 1000;
-    pointer-events: none;
-    transition: opacity 0.4s;
-  }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
 
-  /* ─── WELCOME OVERLAY ─────────────────────────────────────── */
-  #welcome {
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background: var(--ink);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  #welcome.exit {
-    opacity: 0;
-    transform: scale(1.04);
-    pointer-events: none;
-  }
-  .welcome-inner {
-    text-align: center;
-    padding: 40px 24px;
-    max-width: 440px;
-  }
-  .welcome-inner h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 6vw, 3.2rem);
-    color: var(--cream);
-    line-height: 1.2;
-    margin-bottom: 16px;
-    letter-spacing: -0.02em;
-  }
-  .welcome-inner p {
-    font-family: 'Lora', serif;
-    font-style: italic;
-    color: var(--warm-tan);
-    font-size: clamp(1rem, 3vw, 1.15rem);
-    margin-bottom: 48px;
-    line-height: 1.7;
-  }
-  .open-book-btn {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    color: var(--cream);
-    transition: transform 0.25s, color 0.25s;
-  }
-  .open-book-btn:hover { transform: translateY(-3px); color: var(--gold); }
-  .book-icon {
-    font-size: 56px;
-    line-height: 1;
-    filter: drop-shadow(0 4px 16px rgba(201,168,76,0.4));
-    animation: float 3s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50%      { transform: translateY(-8px); }
-  }
-  .open-book-btn span.label {
-    font-family: 'Caveat', cursive;
-    font-size: 1.25rem;
-    letter-spacing: 0.03em;
-    opacity: 0.85;
-  }
-  .welcome-stars {
-    margin-bottom: 40px;
-    opacity: 0.3;
-    font-size: 10px;
-    letter-spacing: 12px;
-    color: var(--gold);
-  }
+        .glass-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            background: rgba(56, 189, 248, 0.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
 
-  /* ─── MAIN SITE ───────────────────────────────────────────── */
-  #main-site {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s;
-    pointer-events: none;
-  }
-  #main-site.visible {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
+        /* Animations */
+        @keyframes scan {
+            0% { top: -100%; }
+            100% { top: 200%; }
+        }
 
-  /* ─── NAV ─────────────────────────────────────────────────── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    padding: 14px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 900;
-    background: rgba(247,243,236,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--parchment);
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .nav-logo span { font-size: 1.3rem; }
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-  }
-  .nav-links a {
-    font-family: 'Lora', serif;
-    font-size: 0.85rem;
-    color: var(--ink-light);
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--sage-dark); }
-  @media (max-width: 540px) {
-    .nav-links { display: none; }
-  }
+        .scanner::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: scan 3s linear infinite;
+            opacity: 0.5;
+        }
 
-  /* ─── HERO ────────────────────────────────────────────────── */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 120px 24px 80px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-bg-circle {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .hero-bg-circle.c1 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(122,158,126,0.12) 0%, transparent 70%);
-    top: -100px; right: -150px;
-  }
-  .hero-bg-circle.c2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(201,138,125,0.10) 0%, transparent 70%);
-    bottom: -80px; left: -80px;
-  }
-  .hero-content { max-width: 680px; text-align: center; position: relative; }
-  .hero-eyebrow {
-    font-family: 'Caveat', cursive;
-    font-size: 1.1rem;
-    color: var(--sage-dark);
-    margin-bottom: 20px;
-    letter-spacing: 0.05em;
-  }
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.6rem, 7vw, 4.5rem);
-    line-height: 1.12;
-    color: var(--ink);
-    letter-spacing: -0.03em;
-    margin-bottom: 24px;
-  }
-  .hero-title em { color: var(--sage-dark); font-style: italic; }
-  .hero-sub {
-    font-size: 1.1rem;
-    color: var(--ink-light);
-    line-height: 1.8;
-    max-width: 480px;
-    margin: 0 auto 44px;
-    font-style: italic;
-  }
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 36px;
-    background: var(--ink);
-    color: var(--cream);
-    border-radius: 50px;
-    font-family: 'Lora', serif;
-    font-size: 1rem;
-    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
-    box-shadow: 0 4px 20px var(--shadow-md);
-  }
-  .hero-cta:hover {
-    background: var(--sage-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(92,125,96,0.3);
-  }
-  .hero-scroll-hint {
-    position: absolute;
-    bottom: 36px; left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Caveat', cursive;
-    font-size: 0.9rem;
-    color: var(--ink-faint);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    animation: bounce 2.4s ease-in-out infinite;
-  }
-  .scroll-arrow { font-size: 1.2rem; }
-  @keyframes bounce {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(-50%) translateY(6px); }
-  }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
 
-  /* ─── SECTION WRAPPER ─────────────────────────────────────── */
-  section {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 90px 24px;
-  }
-  .section-label {
-    font-family: 'Caveat', cursive;
-    font-size: 1rem;
-    color: var(--sage-dark);
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-label::before {
-    content: '';
-    display: inline-block;
-    width: 24px; height: 1px;
-    background: var(--sage-dark);
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-    line-height: 1.2;
-    color: var(--ink);
-    margin-bottom: 40px;
-    letter-spacing: -0.02em;
-  }
+        .nav-active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
 
-  /* ─── SECTION A: WHAT THIS IS ─────────────────────────────── */
-  #what { background: var(--cream); }
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-  }
-  .idea-card {
-    background: var(--parchment);
-    border-radius: var(--r-lg);
-    padding: 28px 26px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    border: 1.5px solid var(--warm-tan);
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .idea-card:hover {
-    transform: translateY(-3px) rotate(-0.3deg);
-    box-shadow: 0 10px 32px var(--shadow);
-    border-color: var(--sage);
-  }
-  .idea-card.open { border-color: var(--sage); background: #f0f5f0; }
-  .card-front {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .card-icon { font-size: 1.8rem; flex-shrink: 0; }
-  .card-prompt {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    color: var(--ink);
-    font-style: italic;
-  }
-  .card-hint {
-    font-family: 'Caveat', cursive;
-    font-size: 0.85rem;
-    color: var(--ink-faint);
-    margin-top: 6px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .card-reveal {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
-    opacity: 0;
-  }
-  .idea-card.open .card-reveal {
-    max-height: 200px;
-    opacity: 1;
-  }
-  .card-reveal-inner {
-    padding-top: 16px;
-    border-top: 1px dashed var(--warm-tan);
-    margin-top: 16px;
-    font-size: 0.95rem;
-    color: var(--ink-light);
-    line-height: 1.7;
-  }
+        /* Recruiter Mode Toggle */
+        #recruiter-mode-btn {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
 
-  /* ─── SECTION B: WHY I STARTED ────────────────────────────── */
-  #why {
-    background: var(--parchment);
-    border-radius: var(--r-lg);
-    margin: 0 auto 0;
-    max-width: 780px;
-    padding: 80px 24px;
-  }
-  .note-wrapper {
-    background: var(--cream);
-    border-radius: var(--r);
-    padding: 44px 40px;
-    box-shadow: 4px 6px 32px var(--shadow), inset 0 0 0 1px var(--warm-tan);
-    position: relative;
-    max-width: 560px;
-    margin: 0 auto;
-  }
-  .note-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 48px;
-    width: 2px; height: 100%;
-    background: rgba(201,138,125,0.25);
-    border-radius: 2px;
-  }
-  .note-lines {
-    position: absolute;
-    inset: 60px 40px;
-    background-image: repeating-linear-gradient(
-      transparent,
-      transparent 27px,
-      rgba(180,160,130,0.15) 27px,
-      rgba(180,160,130,0.15) 28px
-    );
-    pointer-events: none;
-    border-radius: 4px;
-  }
-  .note-date {
-    font-family: 'Caveat', cursive;
-    font-size: 0.95rem;
-    color: var(--ink-faint);
-    margin-bottom: 20px;
-  }
-  #typewriter-text {
-    font-family: 'Lora', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    line-height: 1.85;
-    color: var(--ink-light);
-    min-height: 160px;
-    position: relative;
-    z-index: 1;
-  }
-  .cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1.1em;
-    background: var(--sage-dark);
-    vertical-align: text-bottom;
-    margin-left: 2px;
-    animation: blink 0.9s step-end infinite;
-  }
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-  .note-sig {
-    font-family: 'Caveat', cursive;
-    font-size: 1.4rem;
-    color: var(--ink);
-    margin-top: 24px;
-    text-align: right;
-    position: relative;
-    z-index: 1;
-  }
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
 
-  /* ─── SECTION C: JOIN (ONBOARDING FLOW) ─────────────────────── */
-  #join {
-    background: var(--cream);
-  }
-  .flow-wrapper {
-    background: var(--ink);
-    border-radius: var(--r-lg);
-    padding: 48px 40px;
-    box-shadow: 0 16px 48px var(--shadow-md);
-    max-width: 560px;
-    margin: 0 auto;
-    color: var(--cream);
-  }
-  @media (max-width: 560px) {
-    .flow-wrapper { padding: 32px 22px; }
-  }
-  .flow-step { display: none; }
-  .flow-step.active { display: block; animation: fadeSlide 0.4s ease; }
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: none; }
-  }
-  .flow-q {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    color: var(--cream);
-    margin-bottom: 28px;
-    line-height: 1.35;
-  }
-  .flow-q em { color: var(--gold); font-style: italic; }
-  .flow-sub {
-    font-family: 'Caveat', cursive;
-    font-size: 0.95rem;
-    color: rgba(247,243,236,0.5);
-    margin-bottom: 28px;
-    display: block;
-  }
-  /* Step 1 - frequency buttons */
-  .freq-btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .freq-btn {
-    padding: 12px 20px;
-    border-radius: 50px;
-    border: 1.5px solid rgba(247,243,236,0.2);
-    color: rgba(247,243,236,0.7);
-    font-family: 'Lora', serif;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-    background: rgba(247,243,236,0.05);
-  }
-  .freq-btn:hover { border-color: var(--sage); color: var(--sage); }
-  .freq-btn.selected {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: var(--cream);
-  }
-  /* Step 2 - interest tags */
-  .tag-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .tag-btn {
-    padding: 10px 18px;
-    border-radius: 50px;
-    border: 1.5px solid rgba(247,243,236,0.2);
-    color: rgba(247,243,236,0.7);
-    font-family: 'Lora', serif;
-    font-size: 0.9rem;
-    transition: all 0.22s;
-    background: rgba(247,243,236,0.05);
-  }
-  .tag-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .tag-btn.selected {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--ink);
-  }
-  /* Step 3 - journal textarea */
-  .journal-wrap {
-    background: rgba(247,243,236,0.07);
-    border: 1.5px solid rgba(247,243,236,0.15);
-    border-radius: var(--r);
-    padding: 20px 22px;
-    position: relative;
-  }
-  .journal-wrap::before {
-    content: '"';
-    font-family: 'Playfair Display', serif;
-    font-size: 5rem;
-    color: rgba(247,243,236,0.06);
-    position: absolute;
-    top: -10px; left: 10px;
-    line-height: 1;
-    pointer-events: none;
-  }
-  .journal-wrap textarea {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--cream);
-    font-family: 'Lora', serif;
-    font-style: italic;
-    font-size: 1rem;
-    line-height: 1.8;
-    resize: none;
-    min-height: 120px;
-  }
-  .journal-wrap textarea::placeholder { color: rgba(247,243,236,0.3); }
-  /* Step 4 - membership card */
-  .membership-card {
-    background: linear-gradient(135deg, var(--parchment) 0%, var(--warm-tan) 100%);
-    border-radius: var(--r);
-    padding: 28px 28px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    position: relative;
-    overflow: hidden;
-  }
-  .membership-card::after {
-    content: '📖';
-    position: absolute;
-    right: 16px; top: 16px;
-    font-size: 2.5rem;
-    opacity: 0.12;
-  }
-  .card-field-label {
-    font-family: 'Caveat', cursive;
-    font-size: 0.85rem;
-    color: var(--ink-faint);
-    margin-bottom: 4px;
-    display: block;
-  }
-  .card-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1.5px solid var(--warm-tan);
-    outline: none;
-    color: var(--ink);
-    font-family: 'Lora', serif;
-    font-size: 1.05rem;
-    padding: 6px 0 8px;
-    margin-bottom: 20px;
-    transition: border-color 0.2s;
-  }
-  .card-input:focus { border-color: var(--sage-dark); }
-  .card-input::placeholder { color: var(--ink-faint); }
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-  /* flow nav */
-  .flow-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 32px;
-  }
-  .flow-dots {
-    display: flex;
-    gap: 6px;
-  }
-  .flow-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: rgba(247,243,236,0.2);
-    transition: background 0.3s, transform 0.3s;
-  }
-  .flow-dot.active { background: var(--sage); transform: scale(1.3); }
-  .flow-dot.done   { background: rgba(122,158,126,0.5); }
-  .flow-next {
-    padding: 13px 28px;
-    background: var(--sage);
-    color: var(--cream);
-    border-radius: 50px;
-    font-family: 'Lora', serif;
-    font-size: 0.95rem;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .flow-next:hover { background: var(--sage-dark); transform: translateX(2px); }
-  .flow-back {
-    font-family: 'Caveat', cursive;
-    font-size: 1rem;
-    color: rgba(247,243,236,0.4);
-    transition: color 0.2s;
-  }
-  .flow-back:hover { color: rgba(247,243,236,0.7); }
-  .join-submit {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--gold), #d4a850);
-    color: var(--ink);
-    border-radius: 50px;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    margin-top: 8px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(201,168,76,0.35);
-  }
-  .join-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(201,168,76,0.5);
-  }
-  /* confirmation */
-  #confirm-screen {
-    display: none;
-    text-align: center;
-    padding: 20px 0;
-  }
-  #confirm-screen.show { display: block; animation: fadeSlide 0.5s ease; }
-  .confirm-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    display: block;
-    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
-  }
-  @keyframes popIn {
-    from { transform: scale(0); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
-  .confirm-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: var(--cream);
-    margin-bottom: 12px;
-  }
-  .confirm-sub {
-    font-family: 'Lora', serif;
-    font-style: italic;
-    color: rgba(247,243,236,0.6);
-    font-size: 1rem;
-    line-height: 1.7;
-  }
-  .confetti-burst {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 8000;
-    overflow: hidden;
-  }
-  .confetti-piece {
-    position: absolute;
-    width: 8px;
-    height: 14px;
-    border-radius: 2px;
-    top: -20px;
-    animation: fall linear forwards;
-  }
-  @keyframes fall {
-    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-  }
-
-  /* ─── MEETINGS ───────────────────────────────────────────── */
-  #meetings { background: var(--cream); }
-  .meeting-toggles {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-  .meet-toggle {
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: 1.5px solid var(--warm-tan);
-    font-family: 'Lora', serif;
-    font-size: 0.9rem;
-    color: var(--ink-light);
-    background: var(--parchment);
-    transition: all 0.22s;
-  }
-  .meet-toggle.active {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--cream);
-  }
-  .meet-toggle:hover:not(.active) { border-color: var(--sage); color: var(--sage-dark); }
-  .event-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 16px;
-  }
-  .event-card {
-    background: var(--parchment);
-    border: 1.5px solid var(--warm-tan);
-    border-radius: var(--r-lg);
-    padding: 28px 24px;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .event-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-  .event-card.virtual::before   { background: var(--sage); }
-  .event-card.inperson::before  { background: var(--blush); }
-  .event-card.both::before      { background: linear-gradient(90deg, var(--sage), var(--blush)); }
-  .event-card.dimmed { opacity: 0.3; transform: scale(0.97); }
-  .event-icon { font-size: 2rem; margin-bottom: 12px; }
-  .event-type {
-    font-family: 'Caveat', cursive;
-    font-size: 0.85rem;
-    color: var(--ink-faint);
-    margin-bottom: 8px;
-  }
-  .event-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--ink);
-    margin-bottom: 8px;
-  }
-  .event-details {
-    font-size: 0.88rem;
-    color: var(--ink-light);
-    line-height: 1.6;
-  }
-
-  /* ─── FOOTER ─────────────────────────────────────────────── */
-  footer {
-    text-align: center;
-    padding: 60px 24px;
-    background: var(--ink);
-    color: var(--cream);
-  }
-  .footer-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  .footer-sub {
-    font-family: 'Caveat', cursive;
-    font-size: 1rem;
-    color: var(--ink-faint);
-    margin-bottom: 28px;
-  }
-  .footer-line {
-    width: 48px; height: 1px;
-    background: var(--warm-tan);
-    margin: 0 auto 20px;
-    opacity: 0.3;
-  }
-  .footer-copy {
-    font-size: 0.78rem;
-    color: rgba(247,243,236,0.25);
-    font-family: 'Lora', serif;
-  }
-
-  /* ─── SCROLL REVEAL ──────────────────────────────────────── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* ─── DIVIDER ─────────────────────────────────────────────── */
-  .section-divider {
-    width: 64px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--sage), transparent);
-    margin-bottom: 40px;
-  }
-
-  /* ─── HOVER PAPER LIFT ────────────────────────────────────── */
-  .lift {
-    transition: transform 0.25s, box-shadow 0.25s;
-  }
-  .lift:hover {
-    transform: translateY(-4px) rotate(-0.5deg);
-    box-shadow: 0 12px 36px var(--shadow);
-  }
-</style>
+        /* Matrix Rain Background (Subtle) */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.15;
+        }
+    </style>
 </head>
-<body>
+<body class="selection:bg-sky-500 selection:text-white">
 
-<!-- Progress bar -->
-<div id="progress-wrap"><div id="progress-bar"></div></div>
-<div id="progress-label">Page 1</div>
-<div id="page-num">p. 1</div>
+    <canvas id="canvas-bg"></canvas>
 
-<!-- ── WELCOME OVERLAY ──────────────────────────────────────── -->
-<div id="welcome">
-  <div class="welcome-inner">
-    <div class="welcome-stars">✦ ✦ ✦</div>
-    <h1>One Page<br>Book Club</h1>
-    <p>A place to build a reading habit,<br>one page at a time.</p>
-    <button class="open-book-btn" id="open-btn">
-      <span class="book-icon">📖</span>
-      <span class="label">Open the first page</span>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center font-bold text-black text-xl">TD</div>
+                <div class="hidden md:block">
+                    <span class="block text-sm font-bold tracking-tighter">TAJAH DAVIS</span>
+                    <span class="block text-[10px] text-sky-400 font-mono tracking-widest uppercase">Integration Lead</span>
+                </div>
+            </div>
+            <div class="hidden lg:flex items-center gap-10 text-sm font-medium text-gray-400">
+                <a href="#strategy" class="hover:text-white transition-colors">Strategy</a>
+                <a href="#experience" class="hover:text-white transition-colors">Career Timeline</a>
+                <a href="#triage" class="hover:text-white transition-colors">Decision Logic</a>
+                <a href="mailto:Tajahmonay@gmail.com" class="px-5 py-2 glass border border-sky-500/30 text-sky-400 rounded-full hover:bg-sky-500 hover:text-white transition-all">Direct Contact</a>
+            </div>
+            <!-- Recruiter FAB for Mobile/Quick -->
+            <button id="quick-connect" class="lg:hidden w-10 h-10 flex items-center justify-center glass rounded-full text-sky-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Floating Recruiter Mode Button -->
+    <button id="recruiter-mode-toggle" class="fixed bottom-8 right-8 z-[100] px-6 py-3 bg-sky-500 text-black font-bold rounded-full flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group">
+        <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+        </span>
+        RECRUITER MODE
     </button>
-  </div>
-</div>
 
-<!-- ── MAIN SITE ──────────────────────────────────────────── -->
-<div id="main-site">
+    <!-- Main Content -->
+    <main class="pt-32 pb-20">
+        
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-32">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-mono mb-6">
+                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                        SYSTEM STATUS: 100% OPERATIONAL
+                    </div>
+                    <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] mb-8">
+                        DRIVING <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 underline decoration-sky-500/30">CONFIDENCE</span> IN EVERY RELEASE.
+                    </h1>
+                    <p class="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed">
+                        Senior Integration Test Lead specializing in high-stakes <span class="text-white font-semibold">VHA Systems, SAP Workflows,</span> and mission-critical payment pipelines. 10+ years of zero-defect production escapes.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#experience" class="px-8 py-4 bg-sky-500 text-black font-bold rounded-xl hover:bg-white transition-all hover:-translate-y-1">EXPLORE TIMELINE</a>
+                        <a href="mailto:Tajahmonay@gmail.com" class="px-8 py-4 glass border border-white/10 font-bold rounded-xl hover:bg-white/5 transition-all">GET RESUME PDF</a>
+                    </div>
+                </div>
+                <div class="relative hidden lg:block">
+                    <div class="aspect-square glass-card rounded-3xl overflow-hidden p-8 flex flex-col justify-between scanner">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-1">
+                                <p class="text-[10px] text-sky-400 mono tracking-widest uppercase">Integration Metric</p>
+                                <p class="text-4xl font-bold">500+</p>
+                                <p class="text-xs text-gray-500">Test Scripts Authored</p>
+                            </div>
+                            <div class="p-4 bg-sky-500/10 rounded-2xl border border-sky-500/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="text-sky-400" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-black/40 p-6 rounded-2xl border border-white/5">
+                            <p class="text-xs mono text-sky-400 mb-4 font-bold">ACTIVE DEPLOYMENT TRACKER</p>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span>VHA CCN Modernization</span>
+                                    <span class="text-sky-400">99.9% VALIDATED</span>
+                                </div>
+                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-sky-500 h-full w-[99.9%]"></div>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span>SAP Module Interface</span>
+                                    <span class="text-emerald-400">SUCCESS</span>
+                                </div>
+                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-emerald-400 h-full w-full"></div>
+                                </div>
+                            </div>
+                        </div>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo"><span>📖</span> One Page Book Club</div>
-    <ul class="nav-links">
-      <li><a href="#what">What this is</a></li>
-      <li><a href="#why">Our story</a></li>
-      <li><a href="#meetings">Meetings</a></li>
-      <li><a href="#join">Join</a></li>
-    </ul>
-  </nav>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full border-2 border-sky-500/30 flex items-center justify-center mono text-xs">QA</div>
+                            <div class="text-xs">
+                                <p class="font-bold">GO/NO-GO AUTHORITY</p>
+                                <p class="text-gray-500 uppercase">Principal Decision Maker</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- HERO -->
-  <section id="hero" style="max-width:100%; padding-left:24px; padding-right:24px;">
-    <div class="hero-bg-circle c1"></div>
-    <div class="hero-bg-circle c2"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">✦ For the curious, the busy, and the beginners</div>
-      <h2 class="hero-title">Reading doesn't have to be<br><em>a whole thing.</em></h2>
-      <p class="hero-sub">One page a day is enough. One chapter a week is wonderful. There are no rules — just a gentle community and a good book.</p>
-      <a href="#join" class="hero-cta">Join the Club <span>→</span></a>
-    </div>
-    <div class="hero-scroll-hint">
-      <span>keep reading</span>
-      <span class="scroll-arrow">↓</span>
-    </div>
-  </section>
+        <!-- Strategy Grid -->
+        <section id="strategy" class="max-w-7xl mx-auto px-6 mb-32 section-hidden">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+                <div>
+                    <h2 class="text-4xl font-bold mb-4">Core Strategy Engine</h2>
+                    <p class="text-gray-400">Enterprise QA is not about finding bugs; it's about <span class="text-white italic">architecting certainty.</span></p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="px-4 py-2 glass text-xs font-bold text-sky-400">VHA STANDARDS</span>
+                    <span class="px-4 py-2 glass text-xs font-bold text-emerald-400">SAP VALIDATION</span>
+                    <span class="px-4 py-2 glass text-xs font-bold text-indigo-400">AGILE LEAN</span>
+                </div>
+            </div>
 
-  <!-- SECTION A: WHAT THIS IS -->
-  <section id="what">
-    <div class="reveal">
-      <div class="section-label">What this is</div>
-      <h2 class="section-title">A few things we believe in.</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="cards-grid">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card p-10 rounded-3xl">
+                    <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center text-sky-400 mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Master Test Design</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Development of top-tier Master Test Strategies governing 500+ scripts across regression, smoke, and E2E cycles for federal systems.</p>
+                    <ul class="text-xs space-y-2 text-sky-400/80 font-mono">
+                        <li>+ Regression Suites</li>
+                        <li>+ Integration Pipelines</li>
+                        <li>+ UAT Governance</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-10 rounded-3xl border-sky-500/20">
+                    <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Release Guarding</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Expert defect triage and severity assessment that directly informs Go/No-Go decisions for high-compliance healthcare apps.</p>
+                    <ul class="text-xs space-y-2 text-emerald-400/80 font-mono">
+                        <li>+ Risk-Based Prioritization</li>
+                        <li>+ Release Readiness Audits</li>
+                        <li>+ Stakeholder Alignment</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-10 rounded-3xl">
+                    <div class="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Domain Complexity</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Validation of medical claims, CCN payment methodologies, and SAP module exchange within regulated HIPAA environments.</p>
+                    <ul class="text-xs space-y-2 text-indigo-400/80 font-mono">
+                        <li>+ VHA Modernization</li>
+                        <li>+ EDI Transactions</li>
+                        <li>+ SAP Data Validation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-      <div class="idea-card reveal" data-delay="0">
-        <div class="card-front">
-          <span class="card-icon">🐢</span>
-          <div>
-            <div class="card-prompt">It's not about speed.</div>
-            <div class="card-hint">tap to read more ↓</div>
-          </div>
+        <!-- Experience Timeline -->
+        <section id="experience" class="max-w-7xl mx-auto px-6 mb-32 section-hidden">
+            <h2 class="text-4xl font-bold mb-16 text-center">Career Trajectory</h2>
+            <div class="space-y-12">
+                
+                <!-- Siemens -->
+                <div class="experience-block group">
+                    <div class="grid lg:grid-cols-[1fr_3fr] gap-10">
+                        <div class="space-y-2">
+                            <p class="text-sky-400 mono text-sm font-bold">2025 — 2026</p>
+                            <h3 class="text-3xl font-bold">SIEMENS</h3>
+                            <p class="text-gray-500 uppercase tracking-widest text-xs font-bold">Enterprise Test Engineer</p>
+                        </div>
+                        <div class="glass-card p-8 lg:p-12 rounded-3xl group-hover:border-sky-500/40 transition-all">
+                            <p class="text-lg text-gray-300 mb-8 leading-relaxed">
+                                Lead end-to-end integration validation across <span class="text-white font-bold">SAP enterprise systems</span> and Power BI reporting pipelines. Managing cross-module data integrity for high-compliance industrial environments.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-8 mb-8 recruiter-content">
+                                <div>
+                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Key Impact</h4>
+                                    <ul class="space-y-3 text-sm text-gray-400">
+                                        <li class="flex gap-2"><span class="text-sky-500">01</span> Validated E2E SAP transaction module mapping.</li>
+                                        <li class="flex gap-2"><span class="text-sky-500">02</span> QA Lead for Power BI executive dashboard data logic.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Ownership</h4>
+                                    <ul class="space-y-3 text-sm text-gray-400">
+                                        <li class="flex gap-2"><span class="text-sky-500">03</span> Go/No-Go recommendation authority for releases.</li>
+                                        <li class="flex gap-2"><span class="text-sky-500">04</span> Parallel workstream defect triage coordination.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">SAP Modules</span>
+                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">Power BI</span>
+                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">Integration Testing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BCBS -->
+                <div class="experience-block group">
+                    <div class="grid lg:grid-cols-[1fr_3fr] gap-10">
+                        <div class="space-y-2">
+                            <p class="text-sky-400 mono text-sm font-bold">2019 — 2025</p>
+                            <h3 class="text-3xl font-bold">FEDERAL BCBS</h3>
+                            <p class="text-gray-500 uppercase tracking-widest text-xs font-bold">Integration Test Lead</p>
+                        </div>
+                        <div class="glass-card p-8 lg:p-12 rounded-3xl group-hover:border-sky-500/40 transition-all">
+                            <p class="text-lg text-gray-300 mb-8 leading-relaxed">
+                                Owned full lifecycle integration for <span class="text-white font-bold">VHA healthcare programs.</span> Architected strategies for payment processing systems and EDI transaction workflows supporting 50k+ veterans.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-8 mb-8 recruiter-content">
+                                <div>
+                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Key Impact</h4>
+                                    <ul class="space-y-3 text-sm text-gray-400">
+                                        <li class="flex gap-2"><span class="text-sky-500">01</span> Authored 500+ test scripts with 100% production stability.</li>
+                                        <li class="flex gap-2"><span class="text-sky-500">02</span> Reduced defect escape rate to historic lows for CCN.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs mono text-sky-400 mb-4 uppercase font-bold tracking-widest">Leadership</h4>
+                                    <ul class="space-y-3 text-sm text-gray-400">
+                                        <li class="flex gap-2"><span class="text-sky-500">03</span> Coordinated clinical SMEs and federal managers.</li>
+                                        <li class="flex gap-2"><span class="text-sky-500">04</span> Master Test Plan governance for VHA modernization.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">VHA Modernization</span>
+                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">EDI Transactions</span>
+                                <span class="px-3 py-1 bg-white/5 text-[10px] mono text-gray-400 rounded-md border border-white/10 uppercase">Agile/Scrum</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Interactive Triage Simulator -->
+        <section id="triage" class="max-w-7xl mx-auto px-6 mb-32 section-hidden">
+            <div class="glass-card p-12 rounded-3xl border-sky-500/30 overflow-hidden relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-mono mb-6 uppercase tracking-widest">Recruiter Sandbox</div>
+                        <h2 class="text-4xl font-bold mb-6">Test Tajah's <br>Decision Logic.</h2>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            A Senior Lead isn't judged by how many bugs they find, but by the risks they mitigate. Pick a defect scenario to see how Tajah determines release readiness.
+                        </p>
+                        <div class="space-y-4" id="scenario-selector">
+                            <button onclick="runScenario('p1')" class="w-full p-4 glass text-left hover:bg-white/5 transition-all flex justify-between items-center group">
+                                <span>Scenario A: SAP Data Mapping Mismatch</span>
+                                <span class="text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">RUN ANALYTIC →</span>
+                            </button>
+                            <button onclick="runScenario('p2')" class="w-full p-4 glass text-left hover:bg-white/5 transition-all flex justify-between items-center group">
+                                <span>Scenario B: VHA CCN UI Discrepancy</span>
+                                <span class="text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">RUN ANALYTIC →</span>
+                            </button>
+                            <button onclick="runScenario('p3')" class="w-full p-4 glass text-left hover:bg-white/5 transition-all flex justify-between items-center group">
+                                <span>Scenario C: Non-Blocking Log Warning</span>
+                                <span class="text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">RUN ANALYTIC →</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-black/50 p-8 rounded-2xl border border-white/5 min-h-[400px] flex flex-col font-mono text-sm">
+                        <div class="flex gap-2 mb-6">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div id="triage-output" class="text-gray-300">
+                            <span class="text-sky-400">tajah@qa-lead:~$</span> waiting for scenario input...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="max-w-7xl mx-auto px-6 text-center">
+            <div class="py-24 glass rounded-[3rem] border-white/5 relative overflow-hidden">
+                <div class="absolute -top-24 -left-24 w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full"></div>
+                <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full"></div>
+                
+                <h2 class="text-5xl font-bold mb-8">Ready for Production?</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mb-12 text-lg">
+                    Seeking a Senior Lead role in VHA modernization, SAP validation, or enterprise healthcare IT. Let's ensure your next release is your most stable.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center gap-6">
+                    <a href="mailto:Tajahmonay@gmail.com" class="px-12 py-5 bg-sky-500 text-black font-extrabold rounded-2xl hover:scale-105 transition-all">HIRE TAJAH DAVIS</a>
+                    <a href="tel:9733912822" class="px-12 py-5 glass border border-white/10 font-bold rounded-2xl hover:bg-white/5 transition-all">973.391.2822</a>
+                </div>
+                <div class="mt-16 flex justify-center gap-8 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all">
+                    <span class="mono text-xs tracking-tighter">FEDERAL BLUE CROSS BLUE SHIELD</span>
+                    <span class="mono text-xs tracking-tighter">SIEMENS</span>
+                    <span class="mono text-xs tracking-tighter">IBM</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-6 py-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-gray-500 text-xs font-mono">
+        <div>© 2024 TAJAH DAVIS // CLAYTON, NC // AUTHORIZED GO/NO-GO</div>
+        <div class="flex gap-6">
+            <a href="https://linkedin.com/in/tajah-davis" class="hover:text-sky-400">LINKEDIN</a>
+            <a href="mailto:Tajahmonay@gmail.com" class="hover:text-sky-400">EMAIL</a>
+            <span class="text-emerald-500">ENCRYPTED // SECURE</span>
         </div>
-        <div class="card-reveal">
-          <div class="card-reveal-inner">Finishing a book in 3 days means nothing here. Reading it over 3 months and loving it? That's the whole point. Speed isn't a virtue — connection to the story is.</div>
-        </div>
-      </div>
+    </footer>
 
-      <div class="idea-card reveal" data-delay="80">
-        <div class="card-front">
-          <span class="card-icon">💛</span>
-          <div>
-            <div class="card-prompt">No perfection required.</div>
-            <div class="card-hint">tap to read more ↓</div>
-          </div>
-        </div>
-        <div class="card-reveal">
-          <div class="card-reveal-inner">Didn't read this week? Totally fine. Skipped a few chapters? We still want to hear your thoughts. This is a judgment-free zone — always.</div>
-        </div>
-      </div>
+    <script>
+        // Matrix Background
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let width, height, columns;
+        const characters = "01010101010101010101";
+        const fontSize = 14;
+        let drops = [];
 
-      <div class="idea-card reveal" data-delay="160">
-        <div class="card-front">
-          <span class="card-icon">🌱</span>
-          <div>
-            <div class="card-prompt">Built for beginners.</div>
-            <div class="card-hint">tap to read more ↓</div>
-          </div>
-        </div>
-        <div class="card-reveal">
-          <div class="card-reveal-inner">If you're someone who wants to read more but never quite gets there — you're exactly who this is for. We pick accessible books, keep meetings relaxed, and welcome all levels.</div>
-        </div>
-      </div>
+        function initCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            columns = Math.floor(width / fontSize);
+            drops = new Array(columns).fill(1);
+        }
 
-      <div class="idea-card reveal" data-delay="240">
-        <div class="card-front">
-          <span class="card-icon">🗺️</span>
-          <div>
-            <div class="card-prompt">Your pace is the right pace.</div>
-            <div class="card-hint">tap to read more ↓</div>
-          </div>
-        </div>
-        <div class="card-reveal">
-          <div class="card-reveal-inner">Some months you'll devour the book. Others you'll read the back cover and join the chat anyway. Both are a win. We meet you wherever you are.</div>
-        </div>
-      </div>
+        function draw() {
+            ctx.fillStyle = 'rgba(3, 7, 18, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = '#0ea5e9';
+            ctx.font = fontSize + 'px monospace';
 
-    </div>
-  </section>
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
 
-  <!-- SECTION B: WHY I STARTED THIS -->
-  <section id="why" style="max-width:100%; background: var(--parchment); padding: 80px 24px;">
-    <div style="max-width:780px; margin:0 auto;">
-      <div class="reveal">
-        <div class="section-label">Our story</div>
-        <h2 class="section-title">Why I started this.</h2>
-        <div class="section-divider"></div>
-      </div>
-      <div class="note-wrapper reveal lift">
-        <div class="note-lines"></div>
-        <div class="note-date">March, a few years ago —</div>
-        <div id="typewriter-text"><span class="cursor"></span></div>
-        <div class="note-sig" id="note-sig" style="opacity:0; transition: opacity 0.8s 0.3s;">— Maya ✦</div>
-      </div>
-    </div>
-  </section>
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        setInterval(draw, 33);
 
-  <!-- SECTION C: JOIN -->
-  <section id="join">
-    <div class="reveal" style="text-align:center; margin-bottom: 40px;">
-      <div class="section-label" style="justify-content:center;">Join the club</div>
-      <h2 class="section-title" style="text-align:center;">Ready to turn one page?</h2>
-      <p style="color: var(--ink-light); font-style:italic; font-size:1rem; line-height:1.7;">It takes about 2 minutes. No pressure, no newsletters, no spam — just a warm welcome.</p>
-    </div>
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('section-visible');
+            });
+        }, { threshold: 0.1 });
 
-    <div class="flow-wrapper reveal">
-      <!-- Step 1 -->
-      <div class="flow-step active" id="step-1">
-        <div class="flow-q">How often do you <em>actually</em> read right now?</div>
-        <span class="flow-sub">No judgment, we promise.</span>
-        <div class="freq-btns">
-          <button class="freq-btn" data-val="daily">Every day 🌞</button>
-          <button class="freq-btn" data-val="weekly">A few times a week</button>
-          <button class="freq-btn" data-val="sometimes">When I remember</button>
-          <button class="freq-btn" data-val="rarely">Barely ever 😅</button>
-          <button class="freq-btn" data-val="never">I want to start!</button>
-        </div>
-        <div class="flow-nav">
-          <div class="flow-back"></div>
-          <div class="flow-dots">
-            <div class="flow-dot active"></div>
-            <div class="flow-dot"></div>
-            <div class="flow-dot"></div>
-            <div class="flow-dot"></div>
-          </div>
-          <button class="flow-next" onclick="nextStep(2)">Next →</button>
-        </div>
-      </div>
+        document.querySelectorAll('.section-hidden').forEach(el => observer.observe(el));
 
-      <!-- Step 2 -->
-      <div class="flow-step" id="step-2">
-        <div class="flow-q">What kinds of books light you up?</div>
-        <span class="flow-sub">Pick as many as you want.</span>
-        <div class="tag-grid">
-          <button class="tag-btn">📚 Fiction</button>
-          <button class="tag-btn">🌱 Self-growth</button>
-          <button class="tag-btn">💕 Romance</button>
-          <button class="tag-btn">📖 Memoirs</button>
-          <button class="tag-btn">✨ Easy reads</button>
-          <button class="tag-btn">🔍 Mystery</button>
-          <button class="tag-btn">🌍 Non-fiction</button>
-          <button class="tag-btn">🪄 Fantasy</button>
-        </div>
-        <div class="flow-nav">
-          <button class="flow-back" onclick="nextStep(1)">← Back</button>
-          <div class="flow-dots">
-            <div class="flow-dot done"></div>
-            <div class="flow-dot active"></div>
-            <div class="flow-dot"></div>
-            <div class="flow-dot"></div>
-          </div>
-          <button class="flow-next" onclick="nextStep(3)">Next →</button>
-        </div>
-      </div>
+        // Triage Simulator Logic
+        function runScenario(type) {
+            const output = document.getElementById('triage-output');
+            output.innerHTML = `<span class="text-sky-400 animate-pulse">Running diagnostic...</span>`;
+            
+            setTimeout(() => {
+                let report = "";
+                if (type === 'p1') {
+                    report = `
+                        <span class="text-red-400">[CRITICAL] DEFECT DETECTED</span><br>
+                        <span class="text-gray-500">Location: SAP Data Mapping Layer</span><br><br>
+                        <span class="text-white">ANALYSIS:</span> Found mismatch in financial transaction posting between SAP module and database.<br><br>
+                        <span class="text-yellow-400">DECISION: NO-GO</span><br>
+                        <span class="text-gray-400">RATIONALE: Data integrity risk outweighs deployment timeline. Rollback recommended. Defect escalated to Lead Developer and Product Owner for P1 resolution.</span>
+                    `;
+                } else if (type === 'p2') {
+                    report = `
+                        <span class="text-yellow-400">[MAJOR] DEFECT DETECTED</span><br>
+                        <span class="text-gray-500">Location: CCN Claims Portal UI</span><br><br>
+                        <span class="text-white">ANALYSIS:</span> Inconsistent font rendering and button alignment on the primary payment portal dashboard for mobile users.<br><br>
+                        <span class="text-sky-400">DECISION: CONDITIONAL GO</span><br>
+                        <span class="text-gray-400">RATIONALE: Defect is purely cosmetic. Core payment engine is functional. Deployment continues with a fast-follow fix scheduled for Sprint +1.</span>
+                    `;
+                } else if (type === 'p3') {
+                    report = `
+                        <span class="text-green-400">[INFO] SYSTEM WARNING</span><br>
+                        <span class="text-gray-500">Location: Middleware Logging Service</span><br><br>
+                        <span class="text-white">ANALYSIS:</span> Warning logs generated during peak load testing but do not affect throughput or response time.<br><br>
+                        <span class="text-emerald-400">DECISION: GO</span><br>
+                        <span class="text-gray-400">RATIONALE: No functional impact detected. System benchmarks meet VHA standards. Proceed with production push.</span>
+                    `;
+                }
+                output.innerHTML = `<span class="text-sky-400">tajah@qa-lead:~$</span> triage --assess ${type}<br><br>${report}`;
+            }, 800);
+        }
 
-      <!-- Step 3 -->
-      <div class="flow-step" id="step-3">
-        <div class="flow-q">In your own words — what do you hope to get from this?</div>
-        <span class="flow-sub">There's no wrong answer. Write like you're talking to a friend.</span>
-        <div class="journal-wrap">
-          <textarea id="journal-input" placeholder="Maybe I just want something to look forward to at the end of a long day…" rows="5"></textarea>
-        </div>
-        <div class="flow-nav">
-          <button class="flow-back" onclick="nextStep(2)">← Back</button>
-          <div class="flow-dots">
-            <div class="flow-dot done"></div>
-            <div class="flow-dot done"></div>
-            <div class="flow-dot active"></div>
-            <div class="flow-dot"></div>
-          </div>
-          <button class="flow-next" onclick="nextStep(4)">Next →</button>
-        </div>
-      </div>
+        // Recruiter Mode Toggle
+        const recruiterBtn = document.getElementById('recruiter-mode-toggle');
+        let recruiterModeActive = false;
 
-      <!-- Step 4 -->
-      <div class="flow-step" id="step-4">
-        <div class="flow-q">Last step — fill out your membership card.</div>
-        <span class="flow-sub">You're almost in. 🎉</span>
-        <div class="membership-card">
-          <label class="card-field-label">Your name</label>
-          <input class="card-input" id="member-name" type="text" placeholder="Write your name here…">
-          <label class="card-field-label">Your email</label>
-          <input class="card-input" id="member-email" type="email" placeholder="Where should we send your welcome note?">
-        </div>
-        <button class="join-submit" onclick="submitJoin()" style="margin-top:24px;">
-          Join One Page Book Club ✦
-        </button>
-        <div class="flow-nav" style="margin-top:16px;">
-          <button class="flow-back" onclick="nextStep(3)">← Back</button>
-          <div class="flow-dots">
-            <div class="flow-dot done"></div>
-            <div class="flow-dot done"></div>
-            <div class="flow-dot done"></div>
-            <div class="flow-dot active"></div>
-          </div>
-          <div></div>
-        </div>
-      </div>
-
-      <!-- Confirmation -->
-      <div id="confirm-screen">
-        <span class="confirm-icon">📖</span>
-        <div class="confirm-title">You're in.</div>
-        <p class="confirm-sub">Welcome to your first chapter, <span id="confirm-name"></span>.<br>We're so glad you're here. Watch your inbox for a warm welcome.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- MEETINGS -->
-  <section id="meetings">
-    <div class="reveal">
-      <div class="section-label">Gatherings</div>
-      <h2 class="section-title">When we meet.</h2>
-      <div class="section-divider"></div>
-      <div class="meeting-toggles">
-        <button class="meet-toggle active" data-filter="all">All meetings</button>
-        <button class="meet-toggle" data-filter="virtual">💻 Virtual</button>
-        <button class="meet-toggle" data-filter="inperson">☕ In-person</button>
-      </div>
-    </div>
-    <div class="event-cards reveal">
-      <div class="event-card virtual lift" data-type="virtual">
-        <div class="event-icon">💻</div>
-        <div class="event-type">Virtual</div>
-        <div class="event-title">Monthly Video Chat</div>
-        <div class="event-details">First Saturday of every month<br>7:00 PM – 8:30 PM<br>Join from anywhere in the world.</div>
-      </div>
-      <div class="event-card inperson lift" data-type="inperson">
-        <div class="event-icon">☕</div>
-        <div class="event-type">In-person</div>
-        <div class="event-title">Coffee & Pages</div>
-        <div class="event-details">Third Sunday of every month<br>10:00 AM – 12:00 PM<br>Rotating local cafes. Cozy spots only.</div>
-      </div>
-      <div class="event-card both lift" data-type="virtual">
-        <div class="event-icon">✍️</div>
-        <div class="event-type">Virtual</div>
-        <div class="event-title">Mid-Month Check-in</div>
-        <div class="event-details">Every other Wednesday<br>Short, 30-minute casual chat.<br>"How's the book treating you?"</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">📖 One Page Book Club</div>
-    <div class="footer-sub">One page. Every day. That's it.</div>
-    <div class="footer-line"></div>
-    <div class="footer-copy">Made with love for slow readers, busy people, and everyone in between.</div>
-  </footer>
-
-</div><!-- /main-site -->
-
-<!-- Confetti container -->
-<div class="confetti-burst" id="confetti"></div>
-
-<script>
-/* ────────────────────────────────────────────────────────── */
-/* WELCOME OVERLAY                                          */
-/* ────────────────────────────────────────────────────────── */
-document.getElementById('open-btn').addEventListener('click', function () {
-  const welcome  = document.getElementById('welcome');
-  const mainSite = document.getElementById('main-site');
-  welcome.classList.add('exit');
-  setTimeout(() => {
-    welcome.style.display = 'none';
-    mainSite.classList.add('visible');
-    startTypewriter();
-    initScrollReveal();
-  }, 800);
-});
-
-/* ────────────────────────────────────────────────────────── */
-/* PROGRESS BAR + PAGE NUMBER                               */
-/* ────────────────────────────────────────────────────────── */
-const sections = ['hero','what','why','join','meetings'];
-const pageNames = ['The Cover','Chapter 1','Chapter 2','Chapter 3','Chapter 4'];
-
-function updateProgress() {
-  const scrollTop  = window.scrollY;
-  const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
-  const pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-  document.getElementById('progress-bar').style.width = pct + '%';
-
-  // Detect which section
-  let currentSection = 0;
-  sections.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (el && el.getBoundingClientRect().top <= 120) currentSection = i;
-  });
-  const pageNum = currentSection + 1;
-  document.getElementById('page-num').textContent = 'p. ' + pageNum;
-  document.getElementById('progress-label').textContent = pageNames[currentSection] || 'The Cover';
-}
-window.addEventListener('scroll', updateProgress, { passive: true });
-
-/* ────────────────────────────────────────────────────────── */
-/* SCROLL REVEAL                                            */
-/* ────────────────────────────────────────────────────────── */
-function initScrollReveal() {
-  const els = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const delay = e.target.dataset.delay || 0;
-        setTimeout(() => e.target.classList.add('visible'), +delay);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  els.forEach(el => observer.observe(el));
-}
-
-/* ────────────────────────────────────────────────────────── */
-/* TYPEWRITER                                               */
-/* ────────────────────────────────────────────────────────── */
-const noteText = `I used to be a reader. Then life got busy — work, responsibilities, all of it — and suddenly I realized I hadn't finished a book in over a year. I missed it. Not just the books, but the feeling of disappearing into them.\n\nSo I started this little club with a simple rule: just read one page. That's enough to count. That's enough to belong here.\n\nI wanted a place where no one judges you for reading slowly, for skipping chapters, for picking up a book and putting it back down. Where showing up matters more than keeping up.\n\nIf that sounds like something you need — welcome. This is your place.`;
-
-let typerStarted = false;
-function startTypewriter() {
-  const el = document.getElementById('typewriter-text');
-  if (typerStarted) return;
-  typerStarted = true;
-
-  // Wait until section is near
-  const trigger = () => {
-    const why = document.getElementById('why');
-    if (why && why.getBoundingClientRect().top < window.innerHeight * 0.85) {
-      runTypewriter(el, noteText);
-      window.removeEventListener('scroll', trigger);
-    }
-  };
-  window.addEventListener('scroll', trigger, { passive: true });
-}
-
-function runTypewriter(el, text) {
-  el.innerHTML = '<span class="cursor"></span>';
-  const cursor = el.querySelector('.cursor');
-  let i = 0;
-  const speed = 22;
-
-  function type() {
-    if (i < text.length) {
-      const ch = text[i];
-      const textNode = document.createTextNode(ch === '\n' ? '' : ch);
-      if (ch === '\n') {
-        el.insertBefore(document.createElement('br'), cursor);
-        el.insertBefore(document.createElement('br'), cursor);
-      } else {
-        el.insertBefore(textNode, cursor);
-      }
-      i++;
-      setTimeout(type, speed + Math.random() * 18);
-    } else {
-      cursor.style.display = 'none';
-      document.getElementById('note-sig').style.opacity = '1';
-    }
-  }
-  setTimeout(type, 400);
-}
-
-/* ────────────────────────────────────────────────────────── */
-/* IDEA CARDS (Section A)                                   */
-/* ────────────────────────────────────────────────────────── */
-document.querySelectorAll('.idea-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const wasOpen = card.classList.contains('open');
-    document.querySelectorAll('.idea-card').forEach(c => c.classList.remove('open'));
-    if (!wasOpen) card.classList.add('open');
-  });
-});
-
-/* ────────────────────────────────────────────────────────── */
-/* ONBOARDING FLOW                                          */
-/* ────────────────────────────────────────────────────────── */
-function nextStep(n) {
-  document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById('step-' + n);
-  if (target) target.classList.add('active');
-}
-
-// Frequency single-select
-document.querySelectorAll('.freq-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  });
-});
-
-// Tag multi-select
-document.querySelectorAll('.tag-btn').forEach(btn => {
-  btn.addEventListener('click', () => btn.classList.toggle('selected'));
-});
-
-/* ────────────────────────────────────────────────────────── */
-/* SUBMIT + CONFIRMATION                                    */
-/* ────────────────────────────────────────────────────────── */
-function submitJoin() {
-  const name = document.getElementById('member-name').value.trim() || 'Friend';
-  document.getElementById('confirm-name').textContent = name;
-  document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
-  const conf = document.getElementById('confirm-screen');
-  conf.classList.add('show');
-  launchConfetti();
-}
-
-function launchConfetti() {
-  const container = document.getElementById('confetti');
-  const colors = ['#7a9e7e','#c9a84c','#c98a7d','#f7f3ec','#5c7d60','#d9ccb4'];
-  for (let i = 0; i < 60; i++) {
-    const piece = document.createElement('div');
-    piece.classList.add('confetti-piece');
-    piece.style.left = Math.random() * 100 + 'vw';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.width  = (6 + Math.random() * 8) + 'px';
-    piece.style.height = (10 + Math.random() * 14) + 'px';
-    piece.style.animationDuration = (1.8 + Math.random() * 2.2) + 's';
-    piece.style.animationDelay    = Math.random() * 0.8 + 's';
-    piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
-    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    container.appendChild(piece);
-    piece.addEventListener('animationend', () => piece.remove());
-  }
-}
-
-/* ────────────────────────────────────────────────────────── */
-/* MEETINGS FILTER                                          */
-/* ────────────────────────────────────────────────────────── */
-document.querySelectorAll('.meet-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.meet-toggle').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    document.querySelectorAll('.event-card').forEach(card => {
-      if (filter === 'all') {
-        card.classList.remove('dimmed');
-      } else if (card.dataset.type === filter) {
-        card.classList.remove('dimmed');
-      } else {
-        card.classList.add('dimmed');
-      }
-    });
-  });
-});
-</script>
+        recruiterBtn.addEventListener('click', () => {
+            recruiterModeActive = !recruiterModeActive;
+            const content = document.querySelectorAll('.recruiter-content');
+            
+            if (recruiterModeActive) {
+                recruiterBtn.innerHTML = "MODE: ACTIVE ✓";
+                recruiterBtn.classList.replace('bg-sky-500', 'bg-emerald-500');
+                document.querySelectorAll('.experience-block').forEach(b => b.classList.add('scale-[1.02]', 'border-emerald-500/40'));
+                // Simulate "Auto-Highlight" for recruiters
+                alert("RECRUITER MODE: Career details expanded. Strategic metrics highlighted. Contact information prioritized.");
+            } else {
+                recruiterBtn.innerHTML = `
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                    </span>
+                    RECRUITER MODE`;
+                recruiterBtn.classList.replace('bg-emerald-500', 'bg-sky-500');
+                document.querySelectorAll('.experience-block').forEach(b => b.classList.remove('scale-[1.02]', 'border-emerald-500/40'));
+            }
+        });
+    </script>
 </body>
 </html>
 
